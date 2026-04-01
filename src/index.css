@@ -2,60 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @layer base {
   :root {
-    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --background: 210 30% 97%;
+    --foreground: 220 25% 14%;
 
-    /* Backgrounds */
-    --color-background-primary: 0 0% 100%;
-    --color-background-secondary: 210 20% 97%;
-    --color-background-tertiary: 220 14% 96%;
-    --color-background-success: 142 72% 94%;
-    --color-background-warning: 45 93% 94%;
-    --color-background-danger: 0 86% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 14%;
 
-    /* Text */
-    --color-text-primary: 220 20% 14%;
-    --color-text-secondary: 220 10% 46%;
-    --color-text-success: 142 60% 28%;
-    --color-text-warning: 32 80% 36%;
-    --color-text-danger: 0 72% 42%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 14%;
 
-    /* Borders */
-    --color-border-primary: 220 14% 72%;
-    --color-border-secondary: 220 14% 86%;
-    --color-border-tertiary: 220 14% 91%;
-    --color-border-success: 142 50% 72%;
-    --color-border-danger: 0 60% 78%;
-
-    /* Radii */
-    --border-radius-sm: 6px;
-    --border-radius-md: 10px;
-    --border-radius-lg: 14px;
-
-    /* Shadcn tokens mapped */
-    --background: var(--color-background-tertiary);
-    --foreground: var(--color-text-primary);
-    --card: var(--color-background-primary);
-    --card-foreground: var(--color-text-primary);
-    --popover: var(--color-background-primary);
-    --popover-foreground: var(--color-text-primary);
-    --primary: 220 20% 14%;
+    --primary: 199 89% 38%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 20% 97%;
-    --secondary-foreground: 220 20% 14%;
-    --muted: 220 14% 91%;
+
+    --secondary: 45 93% 58%;
+    --secondary-foreground: 220 25% 14%;
+
+    --muted: 210 20% 93%;
     --muted-foreground: 220 10% 46%;
-    --accent: 210 20% 97%;
-    --accent-foreground: 220 20% 14%;
-    --destructive: 0 72% 42%;
+
+    --accent: 152 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 14% 91%;
-    --input: 220 14% 86%;
-    --ring: 220 20% 14%;
-    --radius: 10px;
+
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 199 89% 38%;
+
+    --radius: 0.75rem;
+
+    --success: 152 60% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 93% 58%;
+    --warning-foreground: 220 25% 14%;
+    --group-a: 199 89% 38%;
+    --group-b: 280 60% 55%;
+    --group-c: 25 90% 55%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -71,14 +56,9 @@
 @layer base {
   * {
     @apply border-border;
-    box-sizing: border-box;
   }
 
   body {
-    font-family: var(--font-sans);
-    background: hsl(var(--color-background-tertiary));
-    color: hsl(var(--color-text-primary));
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground;
   }
 }

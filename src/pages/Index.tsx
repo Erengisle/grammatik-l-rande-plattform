@@ -1,4 +1,5 @@
-import GrammarApp from "@/components/GrammarApp";
+import Quiz from "@/components/Quiz";
 
-const Index = () => <GrammarApp />;
+const Index = () => <Quiz />;
+
 export default Index;

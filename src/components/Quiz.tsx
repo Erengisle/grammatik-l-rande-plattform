@@ -78,6 +78,9 @@ export default function Quiz({ onBack }: Props) {
       <header className="border-b border-border bg-card">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <button onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
             <Sparkles className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-foreground tracking-tight">Adjektivträning</h1>
           </div>

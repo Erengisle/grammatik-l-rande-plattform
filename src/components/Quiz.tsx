@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { generateQuestion, type QuizQuestion, type Group } from "@/data/quizData";
 import { Button } from "@/components/ui/button";
-import { Check, X, ArrowRight, RotateCcw, Sparkles } from "lucide-react";
+import { Check, X, ArrowRight, RotateCcw, Sparkles, ArrowLeft } from "lucide-react";
 
 const groupDescriptions: Record<Group, string> = {
   A: "Obestämd form",
@@ -23,7 +23,11 @@ const groupBorders: Record<Group, string> = {
 
 type Phase = "group" | "inflection" | "feedback";
 
-export default function Quiz() {
+interface Props {
+  onBack: () => void;
+}
+
+export default function Quiz({ onBack }: Props) {
   const [question, setQuestion] = useState<QuizQuestion>(generateQuestion);
   const [phase, setPhase] = useState<Phase>("group");
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
@@ -74,6 +78,9 @@ export default function Quiz() {
       <header className="border-b border-border bg-card">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <button onClick={onBack} className="text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
             <Sparkles className="w-6 h-6 text-primary" />
             <h1 className="text-xl font-bold text-foreground tracking-tight">Adjektivträning</h1>
           </div>

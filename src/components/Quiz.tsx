@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { generateQuestion, type QuizQuestion, type Group } from "@/data/quizData";
 import { Button } from "@/components/ui/button";
-import { Check, X, ArrowRight, RotateCcw, Sparkles } from "lucide-react";
+import { Check, X, ArrowRight, RotateCcw, Sparkles, ArrowLeft } from "lucide-react";
 
 const groupDescriptions: Record<Group, string> = {
   A: "Obestämd form",

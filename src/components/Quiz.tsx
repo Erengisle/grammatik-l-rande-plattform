@@ -23,7 +23,11 @@ const groupBorders: Record<Group, string> = {
 
 type Phase = "group" | "inflection" | "feedback";
 
-export default function Quiz() {
+interface Props {
+  onBack: () => void;
+}
+
+export default function Quiz({ onBack }: Props) {
   const [question, setQuestion] = useState<QuizQuestion>(generateQuestion);
   const [phase, setPhase] = useState<Phase>("group");
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);

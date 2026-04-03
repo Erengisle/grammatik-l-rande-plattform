@@ -2,34 +2,20 @@ import { useState } from "react";
 import TopicMenu, { type Topic } from "@/components/TopicMenu";
 import Quiz from "@/components/Quiz";
 import KomparationQuiz from "@/components/KomparationQuiz";
+import VerbQuiz from "@/components/VerbQuiz";
+import FillBlankQuiz from "@/components/FillBlankQuiz";
+import { FIB_KONJ, FIB_SUBJ } from "@/data/questions";
 
 const Index = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
 
-  if (topic === "adjektiv-bojning") {
-    return <Quiz onBack={() => setTopic(null)} />;
-  }
+  const goBack = () => setTopic(null);
 
-  if (topic === "komparation") {
-    return <KomparationQuiz onBack={() => setTopic(null)} />;
-  }
-
-  // TODO: verb, konjunktioner, subjunktioner quizzes
-  if (topic) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <p className="text-muted-foreground">Kommer snart!</p>
-          <button
-            onClick={() => setTopic(null)}
-            className="text-primary underline"
-          >
-            ← Tillbaka
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (topic === "adjektiv-bojning") return <Quiz onBack={goBack} />;
+  if (topic === "komparation") return <KomparationQuiz onBack={goBack} />;
+  if (topic === "verb") return <VerbQuiz onBack={goBack} />;
+  if (topic === "konjunktioner") return <FillBlankQuiz title="Konjunktioner" questions={FIB_KONJ} onBack={goBack} />;
+  if (topic === "subjunktioner") return <FillBlankQuiz title="Subjunktioner" questions={FIB_SUBJ} onBack={goBack} />;
 
   return <TopicMenu onSelect={setTopic} />;
 };

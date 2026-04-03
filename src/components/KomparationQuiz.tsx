@@ -182,8 +182,14 @@ export default function KomparationQuiz({ onBack }: Props) {
           {phase === "form-type" && (
             <div className="space-y-4">
               <p className="text-center text-sm text-muted-foreground">
-                ✅ Rätt grupp! Ska det vara komparativ eller superlativ?
+                ✅ Rätt grupp! Läs meningen och avgör – komparativ eller superlativ?
               </p>
+              <div className="bg-card border border-border rounded-xl p-4 text-center">
+                <p className="text-lg font-medium text-foreground leading-relaxed italic">
+                  {question.contextSentence.replace("___", "______")}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">({question.positiv})</p>
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 {(["komparativ", "superlativ"] as KompFormType[]).map((ft) => {
                   const isSelected = selectedFormType === ft;

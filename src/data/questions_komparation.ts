@@ -130,7 +130,31 @@ export interface KomparationQuestion {
   correctGroup: KompGroup;
   formType: KompFormType;
   correctAnswer: string;
+  contextSentence: string;
   entry: KomparationEntry;
+}
+
+const komparativTemplates = [
+  (adj: string) => `Den här boken är ___ den andra.`,
+  (adj: string) => `Lisa är ___ sin syster.`,
+  (adj: string) => `Idag är det ___ igår.`,
+  (adj: string) => `Det nya huset är ___ det gamla.`,
+  (adj: string) => `Min väska är ___ din.`,
+  (adj: string) => `Den röda bilen är ___ den blå.`,
+];
+
+const superlativTemplates = [
+  (adj: string) => `Det här är den ___ filmen jag har sett.`,
+  (adj: string) => `Hon är ___ av alla i klassen.`,
+  (adj: string) => `Det var det ___ jag har upplevt.`,
+  (adj: string) => `Sverige har den ___ sommaren i Norden.`,
+  (adj: string) => `Han sprang ___ av alla deltagare.`,
+  (adj: string) => `Det här är den ___ uppgiften på provet.`,
+];
+
+function generateContextSentence(formType: KompFormType, positiv: string): string {
+  const templates = formType === "komparativ" ? komparativTemplates : superlativTemplates;
+  return pickRandom(templates)(positiv);
 }
 
 export function generateKomparationQuestion(formType?: KompFormType): KomparationQuestion {
@@ -141,6 +165,7 @@ export function generateKomparationQuestion(formType?: KompFormType): Komparatio
     correctGroup: entry.group,
     formType: type,
     correctAnswer: type === "komparativ" ? entry.komparativ : entry.superlativ,
+    contextSentence: generateContextSentence(type, entry.positiv),
     entry,
   };
 }

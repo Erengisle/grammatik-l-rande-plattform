@@ -4,7 +4,9 @@ import Quiz from "@/components/Quiz";
 import KomparationQuiz from "@/components/KomparationQuiz";
 import VerbQuiz from "@/components/VerbQuiz";
 import FillBlankQuiz from "@/components/FillBlankQuiz";
+import AdjBankQuiz from "@/components/AdjBankQuiz";
 import { FIB_KONJ, FIB_SUBJ, FIC_BLANDAT } from "@/data/questions";
+import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
 
 const Index = () => {
   const [topic, setTopic] = useState<Topic | null>(null);

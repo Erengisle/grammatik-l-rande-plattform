@@ -75,7 +75,7 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
     if (!selectedTest) return;
     const next = qIndex + 1;
     if (next >= selectedTest.questions.length) {
-      // Test complete – show pick-test
+      if (singleTest) { onBack(); return; }
       setPhase("pick-test");
       setSelectedTest(null);
       return;

@@ -19,6 +19,7 @@ const Index = () => {
   if (topic === "konjunktioner") return <FillBlankQuiz title="Konjunktioner" questions={FIB_KONJ} onBack={goBack} />;
   if (topic === "subjunktioner") return <FillBlankQuiz title="Subjunktioner" questions={FIB_SUBJ} onBack={goBack} />;
   if (topic === "blandat") return <FillBlankQuiz title="Blandat (konj. & subj.)" questions={FIC_BLANDAT} onBack={goBack} />;
+  if (topic === "adjektiv-bank") return <AdjBankQuiz tests={ADJ_BANK_TESTS} onBack={goBack} />;
 
   return <TopicMenu onSelect={setTopic} />;
 };

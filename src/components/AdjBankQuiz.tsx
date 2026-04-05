@@ -31,9 +31,9 @@ interface Props {
 
 export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: Props) {
   const groups = groupLabels || ["A", "B", "C"];
-  const [selectedTest, setSelectedTest] = useState<TestSet | null>(null);
+  const [selectedTest, setSelectedTest] = useState<TestSet | null>(singleTest ? tests[0] : null);
   const [qIndex, setQIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>("pick-test");
+  const [phase, setPhase] = useState<Phase>(singleTest ? "group" : "pick-test");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [groupCorrect, setGroupCorrect] = useState<boolean | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);

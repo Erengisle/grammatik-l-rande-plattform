@@ -176,8 +176,8 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
           {phase === "group" && (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground uppercase tracking-widest text-center">Steg 1: Vilken grupp?</p>
-              <div className="grid grid-cols-3 gap-3">
-                {["A", "B", "C"].map(g => (
+              <div className={`grid gap-3 ${groups.length <= 3 ? "grid-cols-3" : "grid-cols-4"}`}>
+                {groups.map(g => (
                   <button
                     key={g}
                     onClick={() => handleGroupSelect(g)}

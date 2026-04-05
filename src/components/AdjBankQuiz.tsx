@@ -25,12 +25,15 @@ type Phase = "pick-test" | "group" | "answer" | "feedback";
 interface Props {
   tests: TestSet[];
   onBack: () => void;
+  singleTest?: boolean;
+  groupLabels?: string[];
 }
 
-export default function AdjBankQuiz({ tests, onBack }: Props) {
-  const [selectedTest, setSelectedTest] = useState<TestSet | null>(null);
+export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: Props) {
+  const groups = groupLabels || ["A", "B", "C"];
+  const [selectedTest, setSelectedTest] = useState<TestSet | null>(singleTest ? tests[0] : null);
   const [qIndex, setQIndex] = useState(0);
-  const [phase, setPhase] = useState<Phase>("pick-test");
+  const [phase, setPhase] = useState<Phase>(singleTest ? "group" : "pick-test");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [groupCorrect, setGroupCorrect] = useState<boolean | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export default function AdjBankQuiz({ tests, onBack }: Props) {
     if (!selectedTest) return;
     const next = qIndex + 1;
     if (next >= selectedTest.questions.length) {
-      // Test complete – show pick-test
+      if (singleTest) { onBack(); return; }
       setPhase("pick-test");
       setSelectedTest(null);
       return;
@@ -86,6 +89,7 @@ export default function AdjBankQuiz({ tests, onBack }: Props) {
   }, [qIndex, selectedTest]);
 
   const goBackToTests = () => {
+    if (singleTest) { onBack(); return; }
     setSelectedTest(null);
     setPhase("pick-test");
   };
@@ -172,8 +176,8 @@ export default function AdjBankQuiz({ tests, onBack }: Props) {
           {phase === "group" && (
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground uppercase tracking-widest text-center">Steg 1: Vilken grupp?</p>
-              <div className="grid grid-cols-3 gap-3">
-                {["A", "B", "C"].map(g => (
+              <div className={`grid gap-3 ${groups.length <= 3 ? "grid-cols-3" : "grid-cols-4"}`}>
+                {groups.map(g => (
                   <button
                     key={g}
                     onClick={() => handleGroupSelect(g)}

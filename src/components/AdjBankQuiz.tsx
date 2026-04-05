@@ -25,9 +25,12 @@ type Phase = "pick-test" | "group" | "answer" | "feedback";
 interface Props {
   tests: TestSet[];
   onBack: () => void;
+  singleTest?: boolean;
+  groupLabels?: string[];
 }
 
-export default function AdjBankQuiz({ tests, onBack }: Props) {
+export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: Props) {
+  const groups = groupLabels || ["A", "B", "C"];
   const [selectedTest, setSelectedTest] = useState<TestSet | null>(null);
   const [qIndex, setQIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("pick-test");

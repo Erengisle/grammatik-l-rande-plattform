@@ -1,6 +1,6 @@
 import { Sparkles, BookOpen, Languages, Link2, GitBranch, ArrowUpDown } from "lucide-react";
 
-export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner";
+export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat";
 
 interface TopicOption {
   id: Topic;
@@ -45,6 +45,13 @@ const topics: TopicOption[] = [
     description: "Välj rätt subjunktion i meningar",
     icon: <GitBranch className="w-6 h-6" />,
     color: "bg-primary",
+  },
+  {
+    id: "blandat",
+    title: "Blandat (konj. & subj.)",
+    description: "Blandade konjunktioner och subjunktioner – avancerad nivå",
+    icon: <Sparkles className="w-6 h-6" />,
+    color: "bg-secondary",
   },
 ];
 

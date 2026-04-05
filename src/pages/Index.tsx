@@ -4,7 +4,7 @@ import Quiz from "@/components/Quiz";
 import KomparationQuiz from "@/components/KomparationQuiz";
 import VerbQuiz from "@/components/VerbQuiz";
 import FillBlankQuiz from "@/components/FillBlankQuiz";
-import { FIB_KONJ, FIB_SUBJ } from "@/data/questions";
+import { FIB_KONJ, FIB_SUBJ, FIC_BLANDAT } from "@/data/questions";
 
 const Index = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
@@ -16,6 +16,7 @@ const Index = () => {
   if (topic === "verb") return <VerbQuiz onBack={goBack} />;
   if (topic === "konjunktioner") return <FillBlankQuiz title="Konjunktioner" questions={FIB_KONJ} onBack={goBack} />;
   if (topic === "subjunktioner") return <FillBlankQuiz title="Subjunktioner" questions={FIB_SUBJ} onBack={goBack} />;
+  if (topic === "blandat") return <FillBlankQuiz title="Blandat (konj. & subj.)" questions={FIC_BLANDAT} onBack={goBack} />;
 
   return <TopicMenu onSelect={setTopic} />;
 };

@@ -1,6 +1,6 @@
 import { Sparkles, BookOpen, Languages, Link2, GitBranch, ArrowUpDown, Library } from "lucide-react";
 
-export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank";
+export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234";
 
 interface TopicOption {
   id: Topic;
@@ -52,6 +52,20 @@ const topics: TopicOption[] = [
     description: "Blandade konjunktioner och subjunktioner – avancerad nivå",
     icon: <Sparkles className="w-6 h-6" />,
     color: "bg-secondary",
+  },
+  {
+    id: "adj-grupp-abc",
+    title: "Adjektiv – grupp A/B/C",
+    description: "Välj grupp (obestämd/bestämd) och rätt form",
+    icon: <Sparkles className="w-6 h-6" />,
+    color: "bg-secondary",
+  },
+  {
+    id: "adj-komp-1234",
+    title: "Komparation – grupp 1–4",
+    description: "Välj komparationsgrupp och rätt komparativ/superlativ",
+    icon: <ArrowUpDown className="w-6 h-6" />,
+    color: "bg-destructive",
   },
   {
     id: "adjektiv-bank",

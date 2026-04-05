@@ -89,6 +89,7 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
   }, [qIndex, selectedTest]);
 
   const goBackToTests = () => {
+    if (singleTest) { onBack(); return; }
     setSelectedTest(null);
     setPhase("pick-test");
   };

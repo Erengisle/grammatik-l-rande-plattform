@@ -81,6 +81,13 @@ const topics: TopicOption[] = [
     icon: <Library className="w-6 h-6" />,
     color: "bg-accent",
   },
+  {
+    id: "verb-bank",
+    title: "Verbbank (10+ test)",
+    description: "1091 verb – välj grupp 1/2a/2b/3/4 och rätt preteritumform",
+    icon: <Library className="w-6 h-6" />,
+    color: "bg-primary",
+  },
 ];
 
 interface Props {

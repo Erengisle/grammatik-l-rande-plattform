@@ -1,6 +1,6 @@
 import { Sparkles, BookOpen, Languages, Link2, GitBranch, ArrowUpDown, Library } from "lucide-react";
 
-export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234" | "verb-grupp";
+export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234" | "verb-grupp" | "verb-bank";
 
 interface TopicOption {
   id: Topic;

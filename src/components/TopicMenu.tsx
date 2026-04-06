@@ -1,6 +1,6 @@
 import { Sparkles, BookOpen, Languages, Link2, GitBranch, ArrowUpDown, Library } from "lucide-react";
 
-export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234";
+export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234" | "verb-grupp";
 
 interface TopicOption {
   id: Topic;
@@ -66,6 +66,13 @@ const topics: TopicOption[] = [
     description: "Välj komparationsgrupp och rätt komparativ/superlativ",
     icon: <ArrowUpDown className="w-6 h-6" />,
     color: "bg-destructive",
+  },
+  {
+    id: "verb-grupp",
+    title: "Verb – grupp 1/2a/2b/3/4",
+    description: "Identifiera verbgrupp och välj rätt preteritumform",
+    icon: <BookOpen className="w-6 h-6" />,
+    color: "bg-primary",
   },
   {
     id: "adjektiv-bank",

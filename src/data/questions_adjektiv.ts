@@ -127,7 +127,7 @@ export const ADJ_KOMP = [
     word:"hög",
     context:"",
     groupType:"comp_1234", correctGroup:"2",
-    stageQ:"Välj superlativ (obestämd form):",
+    stageQ:"Välj superlativ, obestämd form:",
     options:{A:"högast",B:"högre",C:"högst",D:"högest"},
     correct:"C"
   },
@@ -154,7 +154,7 @@ export const ADJ_KOMP = [
     word:"snabb",
     context:"",
     groupType:"comp_1234", correctGroup:"1",
-    stageQ:"Välj superlativ (obestämd form):",
+    stageQ:"Välj superlativ, obestämd form:",
     options:{A:"snabbast",B:"snabbest",C:"mest snabb",D:"snabbaste"},
     correct:"A"
   },
@@ -181,7 +181,7 @@ export const ADJ_KOMP = [
     word:"musikalisk",
     context:"",
     groupType:"comp_1234", correctGroup:"4",
-    stageQ:"Välj superlativ (obestämd form):",
+    stageQ:"Välj superlativ, obestämd form:",
     options:{A:"musikaliskast",B:"mest musikalisk",C:"musikaliskest",D:"musikaliskre"},
     correct:"B"
   },
@@ -190,7 +190,7 @@ export const ADJ_KOMP = [
     word:"lång",
     context:"",
     groupType:"comp_1234", correctGroup:"2",
-    stageQ:"Välj superlativ (obestämd form):",
+    stageQ:"Välj superlativ, obestämd form:",
     options:{A:"längast",B:"längest",C:"längst",D:"mest lång"},
     correct:"C"
   },
@@ -210,6 +210,52 @@ export const ADJ_KOMP = [
     groupType:"comp_1234", correctGroup:"4",
     stageQ:"Välj komparativ form:",
     options:{A:"spännandemare",B:"mer spännande",C:"spännandeaste",D:"spännanst"},
+    correct:"B"
+  },
+  // ── Bestämd form superlativ (den/det/de + -aste) ──────────────────────────
+  {
+    id:"komp16", type:"two_stage",
+    word:"duktig",
+    context:"den ___",
+    groupType:"comp_1234", correctGroup:"1",
+    stageQ:"Välj superlativ, bestämd form:",
+    options:{A:"duktigast",B:"duktigaste",C:"mer duktig",D:"duktigare"},
+    correct:"B"
+  },
+  {
+    id:"komp17", type:"two_stage",
+    word:"hög",
+    context:"det ___",
+    groupType:"comp_1234", correctGroup:"2",
+    stageQ:"Välj superlativ, bestämd form:",
+    options:{A:"högst",B:"högre",C:"högsta",D:"höge"},
+    correct:"C"
+  },
+  {
+    id:"komp18", type:"two_stage",
+    word:"gammal",
+    context:"de ___",
+    groupType:"comp_1234", correctGroup:"3",
+    stageQ:"Välj superlativ, bestämd form:",
+    options:{A:"äldst",B:"äldsta",C:"äldre",D:"gammaldaste"},
+    correct:"B"
+  },
+  {
+    id:"komp19", type:"two_stage",
+    word:"praktisk",
+    context:"den ___",
+    groupType:"comp_1234", correctGroup:"4",
+    stageQ:"Välj superlativ, bestämd form:",
+    options:{A:"mest praktisk",B:"mest praktiska",C:"praktiskast",D:"mer praktisk"},
+    correct:"B"
+  },
+  {
+    id:"komp20", type:"two_stage",
+    word:"snabb",
+    context:"de ___",
+    groupType:"comp_1234", correctGroup:"1",
+    stageQ:"Välj superlativ, bestämd form:",
+    options:{A:"snabbast",B:"snabbaste",C:"snabbast",D:"mest snabba"},
     correct:"B"
   },
 ];

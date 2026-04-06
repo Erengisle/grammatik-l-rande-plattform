@@ -1,6 +1,6 @@
 import { Sparkles, BookOpen, Languages, Link2, GitBranch, ArrowUpDown, Library } from "lucide-react";
 
-export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234" | "verb-grupp";
+export type Topic = "adjektiv-bojning" | "komparation" | "verb" | "konjunktioner" | "subjunktioner" | "blandat" | "adjektiv-bank" | "adj-grupp-abc" | "adj-komp-1234" | "verb-grupp" | "verb-bank";
 
 interface TopicOption {
   id: Topic;
@@ -80,6 +80,13 @@ const topics: TopicOption[] = [
     description: "1487 adjektiv – välj grupp A/B/C och rätt böjningsform",
     icon: <Library className="w-6 h-6" />,
     color: "bg-accent",
+  },
+  {
+    id: "verb-bank",
+    title: "Verbbank (10+ test)",
+    description: "1091 verb – välj grupp 1/2a/2b/3/4 och rätt preteritumform",
+    icon: <Library className="w-6 h-6" />,
+    color: "bg-primary",
   },
 ];
 

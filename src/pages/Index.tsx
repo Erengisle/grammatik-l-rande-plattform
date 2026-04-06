@@ -9,6 +9,7 @@ import { FIB_KONJ, FIB_SUBJ, FIC_BLANDAT } from "@/data/questions";
 import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
 import { BUILT_IN_TESTS_ADJ } from "@/data/questions_adjektiv";
 import { BUILT_IN_TESTS_VERB } from "@/data/questions_verb";
+import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
 
 const Index = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
@@ -25,6 +26,7 @@ const Index = () => {
   if (topic === "adj-grupp-abc") return <AdjBankQuiz tests={[BUILT_IN_TESTS_ADJ[0]]} onBack={goBack} singleTest />;
   if (topic === "adj-komp-1234") return <AdjBankQuiz tests={[BUILT_IN_TESTS_ADJ[1]]} onBack={goBack} singleTest groupLabels={["1","2","3","4"]} />;
   if (topic === "verb-grupp") return <AdjBankQuiz tests={BUILT_IN_TESTS_VERB} onBack={goBack} groupLabels={["1","2a","2b","3","4"]} />;
+  if (topic === "verb-bank") return <AdjBankQuiz tests={VERB_BANK_TESTS} onBack={goBack} groupLabels={["1","2a","2b","3","4"]} />;
 
   return <TopicMenu onSelect={setTopic} />;
 };

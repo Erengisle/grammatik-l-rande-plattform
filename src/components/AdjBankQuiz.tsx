@@ -136,6 +136,8 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
 
   const contextParts = question.context.split("___");
   const correctAnswerText = question.options[question.correct];
+  const isKonjQ = question.groupType === "konj_type";
+  const isSubjQ = question.groupType === "subj_type";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

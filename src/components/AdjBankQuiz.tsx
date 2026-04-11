@@ -148,7 +148,10 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
               <ArrowLeft className="w-5 h-5" />
             </button>
             <h1 className="text-xl font-bold text-foreground tracking-tight">
-              Adjektiv: <span className="text-primary">{question.word}</span>
+              {isKonjQ || isSubjQ
+                ? (selectedTest?.title || (isKonjQ ? "Konjunktioner" : "Subjunktioner"))
+                : <>Adjektiv: <span className="text-primary">{question.word}</span></>
+              }
             </h1>
           </div>
           <div className="flex items-center gap-4 text-sm">

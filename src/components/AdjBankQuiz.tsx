@@ -31,8 +31,11 @@ interface Props {
 }
 
 export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: Props) {
-  const groups = groupLabels || ["A", "B", "C"];
-  const [selectedTest, setSelectedTest] = useState<TestSet | null>(singleTest ? tests[0] : null);
+  // Determine groups from the first question's groupType, or use provided labels
+  const firstQ = tests[0]?.questions[0];
+  const isKonj = firstQ?.groupType === "konj_type";
+  const isSubj = firstQ?.groupType === "subj_type";
+  const groups = isKonj ? Object.keys(KONJ_GROUPS) : isSubj ? Object.keys(SUBJ_GROUPS) : (groupLabels || ["A", "B", "C"]);
   const [qIndex, setQIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>(singleTest ? "group" : "pick-test");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);

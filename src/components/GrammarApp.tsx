@@ -506,6 +506,7 @@ function Quiz({ test, onFinish, onBack }: any) {
                 : q.correctGroup;
               label = GROUP_INFO[key]?.label || key;
             }
+            return <span className="badge badge-success">{label} ✓</span>;
           })()}
         </div>
       )}

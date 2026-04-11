@@ -495,10 +495,17 @@ function Quiz({ test, onFinish, onBack }: any) {
         <div style={{ marginBottom: 12 }}>
           {(() => {
             const verbDisplayKey: Record<string, string> = { "1": "1v", "2a": "2a", "2b": "2b", "3": "3v", "4": "4v" };
-            const key = q.groupType === "verb_1234"
-              ? (verbDisplayKey[q.correctGroup] || q.correctGroup)
-              : q.correctGroup;
-            return <span className="badge badge-success">{GROUP_INFO[key]?.label || key} ✓</span>;
+            const isKonj2 = q.groupType === "konj_type";
+            const isSubj2 = q.groupType === "subj_type";
+            let label: string;
+            if (isKonj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
+            else if (isSubj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
+            else {
+              const key = q.groupType === "verb_1234"
+                ? (verbDisplayKey[q.correctGroup] || q.correctGroup)
+                : q.correctGroup;
+              label = GROUP_INFO[key]?.label || key;
+            }
           })()}
         </div>
       )}

@@ -36,6 +36,7 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
   const isKonj = firstQ?.groupType === "konj_type";
   const isSubj = firstQ?.groupType === "subj_type";
   const groups = isKonj ? Object.keys(KONJ_GROUPS) : isSubj ? Object.keys(SUBJ_GROUPS) : (groupLabels || ["A", "B", "C"]);
+  const [selectedTest, setSelectedTest] = useState<TestSet | null>(singleTest ? tests[0] : null);
   const [qIndex, setQIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>(singleTest ? "group" : "pick-test");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);

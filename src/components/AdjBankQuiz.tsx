@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ArrowLeft } from "lucide-react";
+import { KONJ_GROUPS, SUBJ_GROUPS } from "@/data/questions";
 
 interface AdjQuestion {
   id: string;

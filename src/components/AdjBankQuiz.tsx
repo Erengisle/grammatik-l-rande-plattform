@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RotateCcw, ArrowLeft } from "lucide-react";
+import { KONJ_GROUPS, SUBJ_GROUPS } from "@/data/questions";
 
 interface AdjQuestion {
   id: string;
@@ -30,7 +31,11 @@ interface Props {
 }
 
 export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: Props) {
-  const groups = groupLabels || ["A", "B", "C"];
+  // Determine groups from the first question's groupType, or use provided labels
+  const firstQ = tests[0]?.questions[0];
+  const isKonj = firstQ?.groupType === "konj_type";
+  const isSubj = firstQ?.groupType === "subj_type";
+  const groups = isKonj ? Object.keys(KONJ_GROUPS) : isSubj ? Object.keys(SUBJ_GROUPS) : (groupLabels || ["A", "B", "C"]);
   const [selectedTest, setSelectedTest] = useState<TestSet | null>(singleTest ? tests[0] : null);
   const [qIndex, setQIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>(singleTest ? "group" : "pick-test");
@@ -131,6 +136,8 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
 
   const contextParts = question.context.split("___");
   const correctAnswerText = question.options[question.correct];
+  const isKonjQ = question.groupType === "konj_type";
+  const isSubjQ = question.groupType === "subj_type";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -141,7 +148,10 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
               <ArrowLeft className="w-5 h-5" />
             </button>
             <h1 className="text-xl font-bold text-foreground tracking-tight">
-              Adjektiv: <span className="text-primary">{question.word}</span>
+              {isKonjQ || isSubjQ
+                ? (selectedTest?.title || (isKonjQ ? "Konjunktioner" : "Subjunktioner"))
+                : <>Adjektiv: <span className="text-primary">{question.word}</span></>
+              }
             </h1>
           </div>
           <div className="flex items-center gap-4 text-sm">
@@ -175,29 +185,39 @@ export default function AdjBankQuiz({ tests, onBack, singleTest, groupLabels }: 
           {/* Stage 1: Group selection */}
           {phase === "group" && (
             <div className="space-y-3">
-              <p className="text-sm text-muted-foreground uppercase tracking-widest text-center">Steg 1: Vilken grupp?</p>
-              <div className={`grid gap-3 ${groups.length <= 3 ? "grid-cols-3" : "grid-cols-4"}`}>
-                {groups.map(g => (
-                  <button
-                    key={g}
-                    onClick={() => handleGroupSelect(g)}
-                    disabled={groupCorrect !== null}
-                    className={`py-4 rounded-xl border-2 font-bold text-lg transition-all duration-200
-                      ${selectedGroup === g
-                        ? groupCorrect
-                          ? "border-green-500 bg-green-500/10 text-green-700"
-                          : "border-destructive bg-destructive/10 text-destructive"
-                        : selectedGroup && g === question.correctGroup
-                          ? "border-green-500 bg-green-500/10 text-green-700"
-                          : "border-border hover:border-primary text-foreground"
-                      }`}
-                  >
-                    Grupp {g}
-                  </button>
-                ))}
+              <p className="text-sm text-muted-foreground uppercase tracking-widest text-center">
+                {isKonjQ || isSubjQ ? (isKonjQ ? "Vilken typ av konjunktion?" : "Vilken typ av subjunktion?") : "Steg 1: Vilken grupp?"}
+              </p>
+              <div className={`${isKonjQ || isSubjQ ? "flex flex-col gap-2" : `grid gap-3 ${groups.length <= 3 ? "grid-cols-3" : "grid-cols-4"}`}`}>
+                {groups.map(g => {
+                  const isKonjSubj = isKonjQ || isSubjQ;
+                  const displayLabel = isKonjQ
+                    ? KONJ_GROUPS[g]
+                    : isSubjQ
+                    ? SUBJ_GROUPS[g]
+                    : `Grupp ${g}`;
+                  return (
+                    <button
+                      key={g}
+                      onClick={() => handleGroupSelect(g)}
+                      disabled={groupCorrect !== null}
+                      className={`${isKonjSubj ? "py-3 px-4 text-left text-sm" : "py-4 text-lg"} rounded-xl border-2 font-bold transition-all duration-200
+                        ${selectedGroup === g
+                          ? groupCorrect
+                            ? "border-green-500 bg-green-500/10 text-green-700"
+                            : "border-destructive bg-destructive/10 text-destructive"
+                          : selectedGroup && g === question.correctGroup
+                            ? "border-green-500 bg-green-500/10 text-green-700"
+                            : "border-border hover:border-primary text-foreground"
+                        }`}
+                    >
+                      {displayLabel}
+                    </button>
+                  );
+                })}
               </div>
               {groupCorrect === false && (
-                <p className="text-center text-sm text-destructive">Rätt grupp: {question.correctGroup}</p>
+                <p className="text-center text-sm text-destructive">Rätt typ: {isKonjQ ? KONJ_GROUPS[question.correctGroup] : isSubjQ ? SUBJ_GROUPS[question.correctGroup] : question.correctGroup}</p>
               )}
             </div>
           )}

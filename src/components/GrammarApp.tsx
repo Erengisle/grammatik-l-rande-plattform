@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BUILT_IN_TESTS, CATEGORIES } from "@/data/questions";
+import { BUILT_IN_TESTS, CATEGORIES, KONJ_GROUPS, SUBJ_GROUPS } from "@/data/questions";
 import { BUILT_IN_TESTS_ADJ, ADJ_CATEGORIES } from "@/data/questions_adjektiv";
 import { BUILT_IN_TESTS_VERB, VERB_CATEGORIES } from "@/data/questions_verb";
 import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
@@ -423,19 +423,30 @@ function Quiz({ test, onFinish, onBack }: any) {
 
   // GROUP STAGE (two_stage questions)
   if (phase === "group" && isTwoStage) {
+    const isVerbGroup = q.groupType === "verb_1234";
+    const isKonj = q.groupType === "konj_type";
+    const isSubj = q.groupType === "subj_type";
+
     const groupChoices =
       q.groupType === "adj_abc" ? ["A", "B", "C"] :
       q.groupType === "comp_1234" ? ["1", "2", "3", "4"] :
       q.groupType === "verb_1234" ? ["1v", "2a", "2b", "3v", "4v"] :
+      q.groupType === "konj_type" ? Object.keys(KONJ_GROUPS) :
+      q.groupType === "subj_type" ? Object.keys(SUBJ_GROUPS) :
       ["A", "B", "C"];
 
     const displayToValue: Record<string, string> = { "1v": "1", "2a": "2a", "2b": "2b", "3v": "3", "4v": "4" };
-    const isVerbGroup = q.groupType === "verb_1234";
 
     function handleGroupPick(displayKey: string) {
       const val = isVerbGroup ? (displayToValue[displayKey] || displayKey) : displayKey;
       if (val === q.correctGroup) { setPhase("form"); setGroupErr(false); }
       else setGroupErr(true);
+    }
+
+    function groupLabel(g: string) {
+      if (isKonj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: KONJ_GROUPS[g] };
+      if (isSubj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: SUBJ_GROUPS[g] };
+      return { label: GROUP_INFO[g]?.label || g, desc: GROUP_INFO[g]?.desc || "" };
     }
 
     return (
@@ -445,9 +456,10 @@ function Quiz({ test, onFinish, onBack }: any) {
         <div className="card" style={{ textAlign: "center", marginBottom: 16 }}>
           {isVerbGroup && <div className="muted">Imperativ</div>}
           <div className="st g1">{isVerbGroup ? `${q.word}!` : q.word}</div>
-          {q.context && <div className="muted g1">{q.context}</div>}
+          {!isKonj && !isSubj && q.context && <div className="muted g1">{q.context}</div>}
+          {(isKonj || isSubj) && q.context && <QText text={q.context} />}
         </div>
-        {!isVerbGroup && (
+        {!isVerbGroup && !isKonj && !isSubj && (
           <div className="muted" style={{ marginBottom: 12 }}>
             {q.groupType === "adj_abc"
               ? "Vilken böjningsgrupp (A, B eller C) gäller för adjektivet i frasen?"
@@ -455,16 +467,20 @@ function Quiz({ test, onFinish, onBack }: any) {
           </div>
         )}
         <div className="muted" style={{ marginBottom: 8 }}>
-          {isVerbGroup ? "Vilken grupp tillhör verbet?" : ""}
+          {isVerbGroup ? "Vilken grupp tillhör verbet?" : isKonj ? "Vilken typ av konjunktion?" : isSubj ? "Vilken typ av subjunktion?" : ""}
         </div>
-        {groupErr && <div className="err" style={{ marginBottom: 8 }}>Fel grupp – försök igen!</div>}
+        {groupErr && <div className="err" style={{ marginBottom: 8 }}>Fel typ – försök igen!</div>}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {groupChoices.map(g => (
-            <button key={g} className="ans" onClick={() => handleGroupPick(g)}>
-              <strong>{GROUP_INFO[g]?.label}</strong>
-              {!isVerbGroup && cur === 0 && <span className="muted" style={{ marginLeft: 8 }}>{GROUP_INFO[g]?.desc}</span>}
-            </button>
-          ))}
+          {groupChoices.map(g => {
+            const { label, desc } = groupLabel(g);
+            return (
+              <button key={g} className="ans" onClick={() => handleGroupPick(g)}>
+                <strong>{label}</strong>
+                {(isKonj || isSubj) && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
+                {!isKonj && !isSubj && !isVerbGroup && cur === 0 && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
     );
@@ -479,10 +495,18 @@ function Quiz({ test, onFinish, onBack }: any) {
         <div style={{ marginBottom: 12 }}>
           {(() => {
             const verbDisplayKey: Record<string, string> = { "1": "1v", "2a": "2a", "2b": "2b", "3": "3v", "4": "4v" };
-            const key = q.groupType === "verb_1234"
-              ? (verbDisplayKey[q.correctGroup] || q.correctGroup)
-              : q.correctGroup;
-            return <span className="badge badge-success">{GROUP_INFO[key]?.label || key} ✓</span>;
+            const isKonj2 = q.groupType === "konj_type";
+            const isSubj2 = q.groupType === "subj_type";
+            let label: string;
+            if (isKonj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
+            else if (isSubj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
+            else {
+              const key = q.groupType === "verb_1234"
+                ? (verbDisplayKey[q.correctGroup] || q.correctGroup)
+                : q.correctGroup;
+              label = GROUP_INFO[key]?.label || key;
+            }
+            return <span className="badge badge-success">{label} ✓</span>;
           })()}
         </div>
       )}

@@ -4,10 +4,11 @@ import { BUILT_IN_TESTS_ADJ, ADJ_CATEGORIES } from "@/data/questions_adjektiv";
 import { BUILT_IN_TESTS_VERB, VERB_CATEGORIES } from "@/data/questions_verb";
 import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
 import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
+import { NOUN_BANK_TESTS, NOUN_BANK_CATEGORIES } from "@/data/questions_nouns";
 import "@/styles/grammar.css";
 
-const ALL_BUILT_IN = [...BUILT_IN_TESTS_VERB, ...VERB_BANK_TESTS, ...BUILT_IN_TESTS_ADJ, ...ADJ_BANK_TESTS, ...BUILT_IN_TESTS];
-const ALL_CATEGORIES = [...CATEGORIES, ...ADJ_CATEGORIES, ...VERB_CATEGORIES];
+const ALL_BUILT_IN = [...BUILT_IN_TESTS_VERB, ...VERB_BANK_TESTS, ...BUILT_IN_TESTS_ADJ, ...ADJ_BANK_TESTS, ...NOUN_BANK_TESTS, ...BUILT_IN_TESTS];
+const ALL_CATEGORIES = [...CATEGORIES, ...ADJ_CATEGORIES, ...VERB_CATEGORIES, ...NOUN_BANK_CATEGORIES];
 
 const ADMIN_PIN = "6498";
 
@@ -44,6 +45,11 @@ const GROUP_INFO: Record<string, { label: string; desc: string }> = {
   "2b": { label: "Grupp 2b", desc: "–er i presens · –te i preteritum · –t i supinum (p/t/k/s/x i stammen)" },
   "3v": { label: "Grupp 3", desc: "lång vokal i stammen · –r i presens · –dde i preteritum · –tt i supinum" },
   "4v": { label: "Grupp 4", desc: "stark eller oregelbunden böjning – byter vokal i preteritum, ingen ändelse" },
+  "n1": { label: "Dekl 1", desc: "en-ord · plural -or  (flicka → flickan, flickor, flickorna)" },
+  "n2": { label: "Dekl 2", desc: "en-ord · plural -ar  (bil → bilen, bilar, bilarna)" },
+  "n3": { label: "Dekl 3", desc: "en-ord · plural -er  (hand → handen, händer, händerna)" },
+  "n4": { label: "Dekl 4", desc: "ett-ord · plural -n  (äpple → äpplet, äpplen, äpplena)" },
+  "n5": { label: "Dekl 5", desc: "ett-ord · plural = sg  (hus → huset, hus, husen)" },
 };
 
 // ── HOME ──
@@ -52,7 +58,7 @@ function Home({ onStudent, onAdmin }: { onStudent: () => void; onAdmin: () => vo
     <div>
       <div className="logo">
         <div className="logo-title">Självtestplattform</div>
-        <div className="logo-sub">Svensk grammatik: test på verb, adjektiv och konjunktioner & subjunktioner</div>
+        <div className="logo-sub">Svensk grammatik: test på verb, adjektiv, substantiv och konjunktioner & subjunktioner</div>
       </div>
       <button className="hcard" onClick={onStudent}>
         <div style={{ fontSize: 24, marginBottom: 6 }}>📖</div>
@@ -426,6 +432,7 @@ function Quiz({ test, onFinish, onBack }: any) {
     const isVerbGroup = q.groupType === "verb_1234";
     const isKonj = q.groupType === "konj_type";
     const isSubj = q.groupType === "subj_type";
+    const isNoun = q.groupType === "noun_dekl";
 
     const groupChoices =
       q.groupType === "adj_abc" ? ["A", "B", "C"] :
@@ -433,6 +440,7 @@ function Quiz({ test, onFinish, onBack }: any) {
       q.groupType === "verb_1234" ? ["1v", "2a", "2b", "3v", "4v"] :
       q.groupType === "konj_type" ? Object.keys(KONJ_GROUPS) :
       q.groupType === "subj_type" ? Object.keys(SUBJ_GROUPS) :
+      q.groupType === "noun_dekl" ? ["1", "2", "3", "4", "5"] :
       ["A", "B", "C"];
 
     const displayToValue: Record<string, string> = { "1v": "1", "2a": "2a", "2b": "2b", "3v": "3", "4v": "4" };
@@ -446,6 +454,7 @@ function Quiz({ test, onFinish, onBack }: any) {
     function groupLabel(g: string) {
       if (isKonj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: KONJ_GROUPS[g] };
       if (isSubj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: SUBJ_GROUPS[g] };
+      if (isNoun) return { label: GROUP_INFO[`n${g}`]?.label || `Dekl ${g}`, desc: GROUP_INFO[`n${g}`]?.desc || "" };
       return { label: GROUP_INFO[g]?.label || g, desc: GROUP_INFO[g]?.desc || "" };
     }
 
@@ -463,6 +472,8 @@ function Quiz({ test, onFinish, onBack }: any) {
           <div className="muted" style={{ marginBottom: 12 }}>
             {q.groupType === "adj_abc"
               ? "Vilken böjningsgrupp (A, B eller C) gäller för adjektivet i frasen?"
+              : q.groupType === "noun_dekl"
+              ? "Vilken deklination tillhör substantivet?"
               : "Vilken komparationsgrupp (1–4) tillhör adjektivet?"}
           </div>
         )}
@@ -477,7 +488,8 @@ function Quiz({ test, onFinish, onBack }: any) {
               <button key={g} className="ans" onClick={() => handleGroupPick(g)}>
                 <strong>{label}</strong>
                 {(isKonj || isSubj) && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
-                {!isKonj && !isSubj && !isVerbGroup && cur === 0 && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
+                {isNoun && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
+                {!isKonj && !isSubj && !isVerbGroup && !isNoun && cur === 0 && <span className="muted" style={{ marginLeft: 8 }}>{desc}</span>}
               </button>
             );
           })}
@@ -497,9 +509,11 @@ function Quiz({ test, onFinish, onBack }: any) {
             const verbDisplayKey: Record<string, string> = { "1": "1v", "2a": "2a", "2b": "2b", "3": "3v", "4": "4v" };
             const isKonj2 = q.groupType === "konj_type";
             const isSubj2 = q.groupType === "subj_type";
+            const isNoun2 = q.groupType === "noun_dekl";
             let label: string;
             if (isKonj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
             else if (isSubj2) label = q.correctGroup.charAt(0).toUpperCase() + q.correctGroup.slice(1);
+            else if (isNoun2) label = GROUP_INFO[`n${q.correctGroup}`]?.label || `Dekl ${q.correctGroup}`;
             else {
               const key = q.groupType === "verb_1234"
                 ? (verbDisplayKey[q.correctGroup] || q.correctGroup)

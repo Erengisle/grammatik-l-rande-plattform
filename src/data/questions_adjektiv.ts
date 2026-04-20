@@ -262,16 +262,8 @@ export const ADJ_KOMP = [
 
 export const BUILT_IN_TESTS_ADJ = [
   {
-    id:"adj-abc",
-    title:"Adjektiv, uppgift 1 – böjningsgrupp A, B eller C",
-    category:"Adjektiv – grupper",
-    source:"",
-    locked:true,
-    questions:ADJ_GROUP_ABC
-  },
-  {
     id:"adj-komp",
-    title:"Adjektiv, uppgift 2 – komparationsgrupp 1–4",
+    title:"Adjektiv – komparationsgrupp 1–4",
     category:"Adjektiv – komparering",
     source:"",
     locked:true,

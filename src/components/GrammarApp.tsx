@@ -315,50 +315,92 @@ function StudentName({ onStart, onBack }: { onStart: (name: string) => void; onB
   );
 }
 
+// ── SUBJECT MAP ──
+const SUBJECTS = [
+  { key: "Adjektiv",                       label: "Adjektiv",                       icon: "📝", categories: ["Adjektiv – grupper", "Adjektiv – komparering"] },
+  { key: "Verb",                            label: "Verb",                            icon: "🔤", categories: ["Verb – grupper"] },
+  { key: "Substantiv",                      label: "Substantiv",                      icon: "🏷️", categories: ["Substantiv – deklination"] },
+  { key: "Konjunktioner & Subjunktioner",   label: "Konjunktioner & Subjunktioner",   icon: "🔗", categories: ["Konjunktioner", "Subjunktioner", "Blandat"] },
+];
+
 // ── STUDENT TEST LIST ──
 function StudentTests({ name, allTests, results, onSelect, onBack }: any) {
+  const [subject, setSubject] = useState<string | null>(null);
   const mine = results.filter((r: any) => r.studentName.toLowerCase() === name.toLowerCase());
+
   function last(id: string) {
     const r = [...mine].filter((r: any) => r.testId === id).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
     return r ? `${r.score}/${r.total}` : null;
   }
+
+  // ── Level 1: subject picker ──
+  if (!subject) {
+    return (
+      <div>
+        <button className="back" onClick={onBack}>← Ändra namn</button>
+        <div className="muted" style={{ marginBottom: 16 }}>Hej {name}! Välj ett ämne.</div>
+        <div className="card">
+          {SUBJECTS.map(s => {
+            const count = allTests.filter((t: any) => s.categories.includes(t.category)).length;
+            if (count === 0) return null;
+            return (
+              <button key={s.key} onClick={() => setSubject(s.key)} className="test-list-item">
+                <div style={{ flex: 1 }}>
+                  <div className="rt">{s.icon} {s.label}</div>
+                  <div className="rm">{count} test{count !== 1 ? "er" : ""}</div>
+                </div>
+                <span style={{ color: "hsl(var(--color-text-secondary))" }}>→</span>
+              </button>
+            );
+          })}
+        </div>
+        {mine.length > 0 && (
+          <div className="card g2">
+            <div className="st" style={{ marginBottom: 12 }}>Din historik</div>
+            <div>
+              {[...mine].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 8).map((r: any) => (
+                <div className="row" key={r.id}>
+                  <div style={{ flex: 1 }}>
+                    <div className="rt">{r.testTitle}</div>
+                    <div className="rm">{fmtDate(r.date)}</div>
+                  </div>
+                  <span className={`badge ${gradeClass(r.score, r.total)}`}>{r.score}/{r.total} · {pct(r.score, r.total)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Level 2: test list within subject ──
+  const s = SUBJECTS.find(x => x.key === subject)!;
+  const testsInSubject = allTests.filter((t: any) => s.categories.includes(t.category));
+
+  // Group by category if more than one category in this subject
+  const usedCats = [...new Set(testsInSubject.map((t: any) => t.category as string))];
+
   return (
     <div>
-      <button className="back" onClick={onBack}>← Ändra namn</button>
-      <div className="muted" style={{ marginBottom: 16 }}>
-        Hej {name}! Välj ett test nedan.
-      </div>
-      <div className="card">
-        {allTests.length === 0 ? <div className="empty">Inga tester tillgängliga.</div>
-          : allTests.map((t: any) => (
-            <button key={t.id} onClick={() => onSelect(t)} className="test-list-item">
-              <div style={{ flex: 1 }}>
-                <div className="rt">{t.title}</div>
-                <div className="rm">{t.questions.length} frågor · {t.category}{last(t.id) ? ` · Senaste: ${last(t.id)}` : ""}</div>
-              </div>
-              <span style={{ color: "hsl(var(--color-text-secondary))" }}>→</span>
-            </button>
-          ))
-        }
-      </div>
-      {mine.length > 0 && (
-        <div className="card g2">
-          <div className="st" style={{ marginBottom: 12 }}>Din historik</div>
-          <div>
-            {[...mine].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 8).map((r: any) => (
-              <div className="row" key={r.id}>
+      <button className="back" onClick={() => setSubject(null)}>← {s.icon} {s.label}</button>
+      <div className="muted" style={{ marginBottom: 16 }}>Välj ett test.</div>
+      {usedCats.map(cat => (
+        <div key={cat}>
+          {usedCats.length > 1 && <div className="muted" style={{ marginBottom: 6, marginTop: 12, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>{cat}</div>}
+          <div className="card">
+            {testsInSubject.filter((t: any) => t.category === cat).map((t: any) => (
+              <button key={t.id} onClick={() => onSelect(t)} className="test-list-item">
                 <div style={{ flex: 1 }}>
-                  <div className="rt">{r.testTitle}</div>
-                  <div className="rm">{fmtDate(r.date)}</div>
+                  <div className="rt">{t.title}</div>
+                  <div className="rm">{t.questions.length} frågor{last(t.id) ? ` · Senaste: ${last(t.id)}` : ""}</div>
                 </div>
-                <span className={`badge ${gradeClass(r.score, r.total)}`}>
-                  {r.score}/{r.total} · {pct(r.score, r.total)}%
-                </span>
-              </div>
+                <span style={{ color: "hsl(var(--color-text-secondary))" }}>→</span>
+              </button>
             ))}
           </div>
         </div>
-      )}
+      ))}
     </div>
   );
 }

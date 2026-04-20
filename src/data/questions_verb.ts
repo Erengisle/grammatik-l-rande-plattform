@@ -79,9 +79,6 @@ const ALL_VERB = [
 const IDX1=[21,0,11,16,29,5,33,2,23,13,37,8,41,18,25,35,27,31,43,39];
 const IDX2=[22,1,12,6,30,17,44,3,24,14,34,9,20,48,26,40,28,32,46,38];
 
-export const BUILT_IN_TESTS_VERB = [
-  {id:"verb-uppg1",title:"Verb, uppgift 1",category:"Verb – grupper",source:"",locked:true,questions:IDX1.map(i=>ALL_VERB[i])},
-  {id:"verb-uppg2",title:"Verb, uppgift 2",category:"Verb – grupper",source:"",locked:true,questions:IDX2.map(i=>ALL_VERB[i])},
-];
+export const BUILT_IN_TESTS_VERB: never[] = [];
 
 export const VERB_CATEGORIES = ["Verb – grupper"];

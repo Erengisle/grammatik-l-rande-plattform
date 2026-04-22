@@ -29,70 +29,44 @@ function QText({ text }: { text: string }) {
 }
 
 const GROUP_INFO: Record<string, { label: string; desc: string }> = {
-  "A": { label: "Grupp A", desc: "en, ett, någon/något, ingen/inget/inga, vilken, varje, annan…" },
-  "B": { label: "Grupp B", desc: "den, det, de — den här/där, det här/där, de här/där…" },
-  "C": { label: "Grupp C", desc: "min/mitt/mina, Evas (genitiv), samma, nästa, följande…" },
-  "1": { label: "Grupp 1", desc: "–are, –ast  (de flesta adjektiv: rolig→roligare)" },
-  "2": { label: "Grupp 2", desc: "–re, –st med omljud  (hög, ung, tung, låg, lång, stor, grov)" },
-  "3": { label: "Grupp 3", desc: "oregelbundna  (gammal, liten, bra, dålig)" },
-  "4": { label: "Grupp 4", desc: "mer / mest  (–isk adjektiv, perfekt och presens particip)" },
-  "1v": { label: "Grupp 1", desc: "–ar i presens · –ade i preteritum · –at i supinum" },
-  "2a": { label: "Grupp 2a", desc: "–er i presens · –de i preteritum · –t i supinum" },
-  "2b": { label: "Grupp 2b", desc: "–er i presens · –te i preteritum · –t i supinum (p/t/k/s/x i stammen)" },
-  "3v": { label: "Grupp 3", desc: "lång vokal i stammen · –r i presens · –dde i preteritum · –tt i supinum" },
-  "4v": { label: "Grupp 4", desc: "stark eller oregelbunden böjning – byter vokal i preteritum" },
-  "n1": { label: "Dekl 1", desc: "en-ord · plural -or  (flicka → flickan, flickor, flickorna)" },
-  "n2": { label: "Dekl 2", desc: "en-ord · plural -ar  (bil → bilen, bilar, bilarna)" },
-  "n3": { label: "Dekl 3", desc: "en-ord · plural -er  (hand → handen, händer, händerna)" },
-  "n4": { label: "Dekl 4", desc: "ett-ord · plural -n  (äpple → äpplet, äpplen, äpplena)" },
-  "n5": { label: "Dekl 5", desc: "ett-ord · plural = sg  (hus → huset, hus, husen)" },
+  "A":  { label: "Grupp A",   desc: "en, ett, någon/något, ingen/inget/inga, vilken, varje, annan…" },
+  "B":  { label: "Grupp B",   desc: "den, det, de — den här/där, det här/där, de här/där…" },
+  "C":  { label: "Grupp C",   desc: "min/mitt/mina, Evas (genitiv), samma, nästa, följande…" },
+  "1":  { label: "Grupp 1",   desc: "–are, –ast  (de flesta adjektiv: rolig→roligare)" },
+  "2":  { label: "Grupp 2",   desc: "–re, –st med omljud  (hög, ung, tung, låg, lång, stor, grov)" },
+  "3":  { label: "Grupp 3",   desc: "oregelbundna  (gammal, liten, bra, dålig)" },
+  "4":  { label: "Grupp 4",   desc: "mer / mest  (–isk adjektiv, perfekt och presens particip)" },
+  "1v": { label: "Grupp 1",   desc: "–ar i presens · –ade i preteritum · –at i supinum" },
+  "2a": { label: "Grupp 2a",  desc: "–er i presens · –de i preteritum · –t i supinum" },
+  "2b": { label: "Grupp 2b",  desc: "–er i presens · –te i preteritum · –t i supinum (p/t/k/s/x)" },
+  "3v": { label: "Grupp 3",   desc: "lång vokal · –r i presens · –dde i preteritum · –tt i supinum" },
+  "4v": { label: "Grupp 4",   desc: "stark eller oregelbunden böjning – byter vokal i preteritum" },
+  "n1": { label: "Dekl 1",    desc: "en-ord · plural -or  (flicka → flickan, flickor, flickorna)" },
+  "n2": { label: "Dekl 2",    desc: "en-ord · plural -ar  (bil → bilen, bilar, bilarna)" },
+  "n3": { label: "Dekl 3",    desc: "en-ord · plural -er  (hand → handen, händer, händerna)" },
+  "n4": { label: "Dekl 4",    desc: "ett-ord · plural -n  (äpple → äpplet, äpplen, äpplena)" },
+  "n5": { label: "Dekl 5",    desc: "ett-ord · plural = sg  (hus → huset, hus, husen)" },
 };
 
+// icon: emoji shown on colored square; iconBg/subColor used in CSS
 const SUBJECTS = [
-  { key: "Adjektiv",                     label: "Adjektiv",                     icon: "📝", color: "subject-adj",  categories: ["Adjektiv – grupper", "Adjektiv – komparering"] },
-  { key: "Verb",                          label: "Verb",                          icon: "🔤", color: "subject-verb", categories: ["Verb – grupper"] },
-  { key: "Substantiv",                    label: "Substantiv",                    icon: "🏷️", color: "subject-noun", categories: ["Substantiv – deklination"] },
-  { key: "Konjunktioner & Subjunktioner", label: "Konjunktioner & Subjunktioner", icon: "🔗", color: "subject-konj", categories: ["Konjunktioner", "Subjunktioner", "Blandat"] },
+  { key: "Adjektiv",                     label: "Adjektiv",                     icon: "✦",  iconBg: "icon-blue",   subColor: "sub-blue",   sub: "Adjektivböjning och komparering",      categories: ["Adjektiv – grupper", "Adjektiv – komparering"] },
+  { key: "Verb",                          label: "Verb",                          icon: "▶",  iconBg: "icon-green",  subColor: "sub-green",  sub: "Verbgrupper och böjning",              categories: ["Verb – grupper"] },
+  { key: "Substantiv",                    label: "Substantiv",                    icon: "◈",  iconBg: "icon-orange", subColor: "sub-orange", sub: "Substantivdeklination 1–5",            categories: ["Substantiv – deklination"] },
+  { key: "Konjunktioner & Subjunktioner", label: "Konjunktioner & Subjunktioner", icon: "⇌",  iconBg: "icon-red",    subColor: "sub-red",    sub: "Konjunktioner, subjunktioner, blandat", categories: ["Konjunktioner", "Subjunktioner", "Blandat"] },
 ];
 
-// ── START SCREEN ──
-function StartScreen({ onStart }: { onStart: (name: string) => void }) {
-  const [name, setName] = useState("");
-  return (
-    <div>
-      <div className="app-header">
-        <div className="logo-title">Grammatiktest</div>
-        <div className="logo-sub">Träna svenska grammatik</div>
-      </div>
-      <div className="wrap">
-        <div className="card">
-          <div className="st">Vad heter du?</div>
-          <input
-            className="inp g2"
-            placeholder="Ditt namn"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && name.trim() && onStart(name.trim())}
-            autoFocus
-          />
-          <div className="g2">
-            <button className="btn btn-p btn-w" disabled={!name.trim()} onClick={() => onStart(name.trim())}>
-              Börja →
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+function SubjectIcon({ icon, bg }: { icon: string; bg: string }) {
+  return <div className={`item-icon ${bg}`}><span className="icon-sym">{icon}</span></div>;
 }
 
 // ── STUDENT TEST LIST ──
-function StudentTests({ name, allTests, results, onSelect, onBack }: any) {
+function StudentTests({ allTests, results, onSelect }: any) {
   const [subject, setSubject] = useState<string | null>(null);
-  const mine = results.filter((r: any) => r.studentName.toLowerCase() === name.toLowerCase());
 
   function last(id: string) {
-    const r = [...mine].filter((r: any) => r.testId === id).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+    const r = [...results].filter((r: any) => r.testId === id)
+      .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
     return r ? `${r.score}/${r.total}` : null;
   }
 
@@ -100,29 +74,33 @@ function StudentTests({ name, allTests, results, onSelect, onBack }: any) {
   if (!subject) {
     return (
       <div>
-        <div className="app-header">
-          <div className="logo-title">Grammatiktest</div>
-          <div className="logo-sub">Hej {name}! Välj ett ämne.</div>
+        <div className="topbar">
+          <div className="topbar-icon">Sv</div>
+          <span className="topbar-title">Svensk grammatik</span>
+        </div>
+        <div className="section-header">
+          <div className="section-label">Välj ämne</div>
+          <div className="section-sub">Vad vill du träna på idag?</div>
         </div>
         <div className="wrap">
-          <button className="back" onClick={onBack}>← Ändra namn</button>
           {SUBJECTS.map(s => {
             const count = allTests.filter((t: any) => s.categories.includes(t.category)).length;
             if (count === 0) return null;
             return (
-              <button key={s.key} onClick={() => setSubject(s.key)} className={`subject-card ${s.color}`}>
-                <div className="subject-icon">{s.icon}</div>
-                <div>
-                  <div className="subject-label">{s.label}</div>
-                  <div className="subject-count">{count} test{count !== 1 ? "er" : ""}</div>
+              <button key={s.key} onClick={() => setSubject(s.key)} className="item-card">
+                <SubjectIcon icon={s.icon} bg={s.iconBg} />
+                <div style={{ flex: 1 }}>
+                  <div className="item-title">{s.label}</div>
+                  <div className={`item-sub ${s.subColor}`}>{s.sub}</div>
                 </div>
+                <span className="chevron">›</span>
               </button>
             );
           })}
-          {mine.length > 0 && (
+          {results.length > 0 && (
             <div className="card g3">
-              <div className="st" style={{ marginBottom: 10 }}>Din historik</div>
-              {[...mine].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 6).map((r: any) => (
+              <div className="st" style={{ marginBottom: 10 }}>Senaste resultat</div>
+              {[...results].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5).map((r: any) => (
                 <div className="row" key={r.id}>
                   <div style={{ flex: 1 }}>
                     <div className="rt">{r.testTitle}</div>
@@ -145,30 +123,35 @@ function StudentTests({ name, allTests, results, onSelect, onBack }: any) {
 
   return (
     <div>
-      <div className={`app-header ${s.color}`} style={{ color: "#111" }}>
-        <div className="logo-title" style={{ color: "#111" }}>{s.icon} {s.label}</div>
-        <div className="logo-sub" style={{ opacity: .6, color: "#111" }}>Välj ett test</div>
+      <div className="topbar">
+        <button className="topbar-back" onClick={() => setSubject(null)}>‹</button>
+        <span className="topbar-title">{s.label}</span>
+      </div>
+      <div className="section-header">
+        <div className="section-label">Välj test</div>
+        <div className="section-sub">{s.sub}</div>
       </div>
       <div className="wrap">
-        <button className="back" onClick={() => setSubject(null)}>← Alla ämnen</button>
         {usedCats.map(cat => (
           <div key={cat}>
             {usedCats.length > 1 && (
-              <div className="muted" style={{ marginBottom: 6, marginTop: 16, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                {cat}
-              </div>
+              <div className="cat-label">{cat}</div>
             )}
-            <div className="card">
-              {testsInSubject.filter((t: any) => t.category === cat).map((t: any) => (
-                <button key={t.id} onClick={() => onSelect(t)} className="test-list-item">
+            {testsInSubject.filter((t: any) => t.category === cat).map((t: any) => {
+              const score = last(t.id);
+              return (
+                <button key={t.id} onClick={() => onSelect(t)} className="item-card">
+                  <SubjectIcon icon={s.icon} bg={s.iconBg} />
                   <div style={{ flex: 1 }}>
-                    <div className="rt">{t.title}</div>
-                    <div className="rm">{t.questions.length} frågor{last(t.id) ? ` · Senaste: ${last(t.id)}` : ""}</div>
+                    <div className="item-title">{t.title}</div>
+                    <div className={`item-sub ${s.subColor}`}>
+                      {t.questions.length} frågor{score ? ` · Senaste: ${score}` : ""}
+                    </div>
                   </div>
-                  <span style={{ color: "hsl(var(--color-text-secondary))", fontSize: 18 }}>›</span>
+                  <span className="chevron">›</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         ))}
       </div>
@@ -211,12 +194,12 @@ function Quiz({ test, onFinish, onBack }: any) {
     const score = test.questions.filter((q: any) => ans[q.id] === q.correct).length;
     const p = pct(score, total);
     return (
-      <div className="wrap" style={{ textAlign: "center", paddingTop: "2rem" }}>
+      <div className="wrap" style={{ textAlign: "center", paddingTop: "2.5rem" }}>
         <div className="ring g3">
-          <span style={{ fontSize: 30, fontWeight: 700 }}>{score}</span>
+          <span style={{ fontSize: 32, fontWeight: 700, color: "#2563eb" }}>{score}</span>
           <span className="muted" style={{ fontSize: 12 }}>av {total}</span>
         </div>
-        <div className="st">{p}% rätt</div>
+        <div className="st g1">{p}% rätt</div>
         <div className="muted g1">{scoreMsg(p)}</div>
         <div className="fr g3" style={{ justifyContent: "center" }}>
           <button className="btn" onClick={onBack}>← Tillbaka</button>
@@ -232,9 +215,7 @@ function Quiz({ test, onFinish, onBack }: any) {
         <span className="muted">{test.title}</span>
         <span className="muted">{cur + 1} / {total}</span>
       </div>
-      <div className="prog">
-        <div className="prog-fill" style={{ width: `${((cur + 1) / total) * 100}%` }} />
-      </div>
+      <div className="prog"><div className="prog-fill" style={{ width: `${((cur + 1) / total) * 100}%` }} /></div>
     </div>
   );
 
@@ -279,18 +260,13 @@ function Quiz({ test, onFinish, onBack }: any) {
           {!isKonj && !isSubj && q.context && <div className="muted g1">{q.context}</div>}
           {(isKonj || isSubj) && q.context && <div className="g1"><QText text={q.context} /></div>}
         </div>
-        {!isVerbGroup && !isKonj && !isSubj && (
-          <div className="muted" style={{ marginBottom: 10 }}>
-            {q.groupType === "adj_abc"   ? "Vilken böjningsgrupp (A, B eller C) gäller?" :
-             q.groupType === "noun_dekl" ? "Vilken deklination tillhör substantivet?" :
-             "Vilken komparationsgrupp (1–4) tillhör adjektivet?"}
-          </div>
-        )}
-        {(isVerbGroup || isKonj || isSubj) && (
-          <div className="muted" style={{ marginBottom: 10 }}>
-            {isVerbGroup ? "Vilken grupp tillhör verbet?" : isKonj ? "Vilken typ av konjunktion?" : "Vilken typ av subjunktion?"}
-          </div>
-        )}
+        <div className="muted" style={{ marginBottom: 10 }}>
+          {q.groupType === "adj_abc"   ? "Vilken böjningsgrupp (A, B eller C) gäller?" :
+           q.groupType === "noun_dekl" ? "Vilken deklination tillhör substantivet?" :
+           q.groupType === "comp_1234" ? "Vilken komparationsgrupp (1–4) tillhör adjektivet?" :
+           isVerbGroup ? "Vilken grupp tillhör verbet?" :
+           isKonj ? "Vilken typ av konjunktion?" : "Vilken typ av subjunktion?"}
+        </div>
         {groupErr && <div className="err" style={{ marginBottom: 10 }}>Fel – försök igen!</div>}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {groupChoices.map(g => {
@@ -369,8 +345,7 @@ function Quiz({ test, onFinish, onBack }: any) {
 export default function GrammarApp() {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState("");
-  const [step, setStep] = useState("name");
+  const [step, setStep] = useState("tests");
   const [activeTest, setActiveTest] = useState<any>(null);
 
   useEffect(() => {
@@ -380,7 +355,7 @@ export default function GrammarApp() {
   }, []);
 
   function handleFinish(score: number, total: number, answers: Record<string, string>) {
-    const r = { id: uid(), studentName: name, testId: activeTest.id, testTitle: activeTest.title, score, total, date: new Date().toISOString(), answers };
+    const r = { id: uid(), testId: activeTest.id, testTitle: activeTest.title, score, total, date: new Date().toISOString(), answers };
     const u = [...results, r];
     setResults(u);
     save("quiz_results", u);
@@ -390,8 +365,7 @@ export default function GrammarApp() {
 
   return (
     <div className="app">
-      {step === "name" && <StartScreen onStart={n => { setName(n); setStep("tests") }} />}
-      {step === "tests" && <StudentTests name={name} allTests={ALL_BUILT_IN} results={results} onSelect={(t: any) => { setActiveTest(t); setStep("quiz") }} onBack={() => setStep("name")} />}
+      {step === "tests" && <StudentTests allTests={ALL_BUILT_IN} results={results} onSelect={(t: any) => { setActiveTest(t); setStep("quiz") }} />}
       {step === "quiz" && <Quiz test={activeTest} onFinish={handleFinish} onBack={() => setStep("tests")} />}
     </div>
   );

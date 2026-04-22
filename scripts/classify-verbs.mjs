@@ -34,19 +34,22 @@ const GROUP4_ROOTS = new Set([
   'kom',    // kommer → kom → kommit
 
   // i → e → i (skriv-typen)
-  'skriv',  // skriver → skrev → skrivit
   'bit',    // biter → bet → bitit
   'driv',   // driver → drev → drivit
+  'glid',   // glider → gled → glidit
+  'gnid',   // gnider → gned → gnidit
   'grip',   // griper → grep → gripit
   'kliv',   // kliver → klev → klivit
+  'knip',   // kniper → knep → knipit
   'lid',    // lider → led → lidit
-  'njut',   // njuter → njöt → njutit
+  'pip',    // piper → pep → pipit
   'rid',    // rider → red → ridit
   'riv',    // river → rev → rivit
   'sit', 'sitt', // sitter → satt → suttit
   'skär',   // skär → skar → skurit
-  'skriv',
   'skjut',  // skjuter → sköt → skjutit
+  'skriv',  // skriver → skrev → skrivit
+  'skrik',  // skriker → skrek → skrikit
   'slit',   // sliter → slet → slitit
   'smit',   // smiter → smet → smitit
   'stig',   // stiger → steg → stigit
@@ -57,16 +60,31 @@ const GROUP4_ROOTS = new Set([
   'tig',    // tiger → teg → tigit
   'vrid',   // vrider → vred → vridit
 
-  // y → ö → u (flyg-typen)
+  // u → ö → u (bjud-typen)
   'bjud',   // bjuder → bjöd → bjudit
+  'hugg',   // hugger → högg → huggit
+  'ljug',   // ljuger → ljög → ljugit
+  'njut',   // njuter → njöt → njutit
+  'sjud',   // sjuder → sjöd → sjudit
+  'sjung',  // sjunger → sjöng → sjungit
+  'sjunk',  // sjunker → sjönk → sjunkit
+  'skjut',
+  'sug',    // suger → sög → sugit
+  'sup',    // super → söp → supit
+  'tjut',   // tjuter → tjöt → tjutit
+
+  // y → ö → u (bryt-typen)
   'bryt',   // bryter → bröt → brutit
   'flyg',   // flyger → flög → flugit
+  'flyt',   // flyter → flöt → flutit
   'frys',   // fryser → frös → frusit
   'klyv',   // klyver → klöv → kluvit
   'knyt',   // knyter → knöt → knutit
-  'ljug',   // ljuger → ljög → ljugit
-  'skjut',
-  'sup',    // super → söp → supit
+  'kryp',   // kryper → kröp → krupit
+  'ryt',    // ryter → röt → rutit
+  'skryt',  // skryter → skröt → skrutit
+  'smyg',   // smyger → smög → smugit
+  'snyt',   // snyter → snöt → snutit
 
   // i/u → a → u (bind-typen)
   'bind',   // binder → band → bundit
@@ -74,46 +92,59 @@ const GROUP4_ROOTS = new Set([
   'brist',  // brister → brast → brustit
   'drick',  // dricker → drack → druckit
   'finn',   // finns/finner → fanns → funnit
+  'försvinn', // försvinner → försvann → försvunnit
   'hinn',   // hinner → hann → hunnit
   'rinn',   // rinner → rann → runnit
-  'sjunk',  // sjunker → sjönk → sjunkit
-  'sjung',  // sjunger → sjöng → sjungit
+  'slipp',  // slipper → slapp → sluppit
+  'spinn',  // spinner → spann → spunnit
+  'sprick', // spricker → sprack → spruckit
   'spring', // springer → sprang → sprungit
   'stick',  // sticker → stack → stuckit
   'sting',  // stinger → stack → stungit
   'stink',  // stinker → stank → stunkit
   'vinn',   // vinner → vann → vunnit
 
-  // a-o-a (far-typen)
+  // a → o → a (far-typen)
   'far',    // far → for → farit (fara)
 
-  // Övriga starka
+  // ä → a → u
   'bär',    // bär → bar → burit
+  'skär',   // skär → skar → skurit  (dubblett av ovan)
+  'stjäl',  // stjäl → stal → stulit
+  'svär',   // svär → svor → svurit
+
+  // Övriga starka
   'dra', 'drag', // drar → drog → dragit
   'gråt',   // gråter → grät → gråtit
   'le',     // ler → log → lett
   'låt',    // låter → lät → låtit
   'se',     // ser → såg → sett
   'ge', 'giv', // ger → gav → gett
-  'stjäl',  // stjäl → stal → stulit
   'skin',   // skiner → sken → skinit
+  'slå',    // slår → slog → slagit
   'ät',     // äter → åt → ätit
 
-  // Oregelbundna med preteritum på konsonant/special
-  'bli',    // blir → blev → blivit
+  // Oregelbundna
   'be',     // ber → bad → bett
-  'säg',    // säger → sa/sade → sagt  (oregelbunden)
+  'bli',    // blir → blev → blivit
   'delta',  // deltar → deltog → deltagit
-  'skrik',  // skriker → skrek → skrikit
-  'flyt',   // flyter → flöt → flutit
-  'svält',  // svälter → svalt → svultit
-  'sov',    // sover → sov → sovit  (sova)
-  'innebär',// innebär → innebar → inneburit
-
-  // Speciella
+  'dö',     // dör → dog → dött
+  'fall',   // faller → föll → fallit
+  'få',     // får → fick → fått
+  'gå',     // går → gick → gått
   'ha',     // har → hade → haft
+  'håll',   // håller → höll → hållit
+  'innebär',// innebär → innebar → inneburit
+  'kom',    // kommer → kom → kommit
+  'ligg',   // ligger → låg → legat
+  'sov',    // sover → sov → sovit
+  'stå',    // står → stod → stått
+  'svält',  // svälter → svalt → svultit
+  'säg',    // säger → sa/sade → sagt
+  'sätt',   // sätter → satte → satt
+  'ta', 'tag', // tar → tog → tagit
+  'var',    // är → var → varit
   'vet',    // vet → visste → vetat
-  'sätt',   // sätter → satte → satt  (sätta, oregelbunden supinum)
 ]);
 
 // ── Prefix – längst först ────────────────────────────────────────────────────

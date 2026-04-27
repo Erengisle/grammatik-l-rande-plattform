@@ -321,18 +321,54 @@ function makeAdjQuestion(base, type, id) {
 // SUBSTANTIV
 // ══════════════════════════════════════════════════════════════════════════════
 
+// Grupp 3-suffix enligt Fasth-Kannermark (betonade ändelser och lånordsuffix)
+const G3_SUFFIXES = [
+  // Betonade svenska suffix
+  'het', 'nad', 'skap',
+  // Betonade låneordsuffix
+  'ör', 'eur', 'ion', 'itet', 'else',
+  // Vokaliska suffix → grupp 3
+  'eri', 'ori', 'é',
+  // ett-ord: -eum, -ium
+  'eum', 'ium',
+  // -tor/-sor (motor, traktor, professor, reaktor)
+  'tor', 'sor',
+  // Undantag från grupp 2 (Fasth-Kannermark p.10)
+  'muskel', 'möbel', 'fiber',
+];
+
 function classifyNoun(word, genus) {
   const w = word.toLowerCase().trim();
   const isEn = genus === 'en';
   const isEtt = genus === 'ett';
 
+  // ── Grupp 1: en-ord på -a ─────────────────────────────────────────────────
   if (isEn && w.endsWith('a')) return 1;
-  if (isEn && w.endsWith('e')) return 2;
+
+  // ── Grupp 5: nollplural ──────────────────────────────────────────────────
+  // En-ord: agentsubstantiv på -are, -ande, -ende
   if (isEn && (w.endsWith('are') || w.endsWith('ande') || w.endsWith('ende'))) return 5;
-  if (isEn && (w.endsWith('ion') || w.endsWith('else') || w.endsWith('ighet'))) return 3;
-  if (isEtt && /[eiouåäöy]$/.test(w)) return 4;
+
+  // ── Grupp 3 (kontrolleras före grupp 4/5 så att -eri/-eum/-ium fångas) ──
+  for (const s of G3_SUFFIXES) {
+    if (w.endsWith(s)) return 3;
+  }
+
+  // ── Grupp 4: ett-ord på vokal ────────────────────────────────────────────
+  if (isEtt && /[aeiouyåäö]$/.test(w)) return 4;
+
+  // ── Grupp 5: ett-ord på konsonant ────────────────────────────────────────
   if (isEtt) return 5;
-  if (isEn) return 2; // standard en-ord
+
+  // ── Grupp 2: övriga en-ord ───────────────────────────────────────────────
+  // Specificerade obetonade ändelser (Fasth-Kannermark p.10 punkt 2–3)
+  if (isEn && (w.endsWith('ing') || w.endsWith('dom') || w.endsWith('lek'))) return 2;
+  // Obetonat -e, -el, -en, -er, -ar, -on
+  if (isEn && /(?:el|en|er|ar|on)$/.test(w)) return 2;
+  if (isEn && w.endsWith('e')) return 2;
+  // Default: en-ord på konsonant → grupp 2
+  if (isEn) return 2;
+
   return null;
 }
 
@@ -344,11 +380,57 @@ function nounForms(word, group, genus) {
       return { sg: s + 'an', pli: s + 'or', pld: s + 'orna' };
     }
     case 2: {
-      const s = w.endsWith('e') ? w.slice(0, -1) : w;
-      return { sg: w + 'en', pli: s + 'ar', pld: s + 'arna' };
+      // Obetonade ändelser: -el, -er, -en, -ar, -on → speciell hantering
+      if (w.endsWith('el')) {
+        const r = w.slice(0, -2); // nyckel → nyck
+        return { sg: w + 'n', pli: r + 'lar', pld: r + 'larna' };
+      }
+      if (w.endsWith('er') && w.length > 4) {
+        const r = w.slice(0, -2); // vinter → vint
+        return { sg: w + 'n', pli: r + 'rar', pld: r + 'rarna' };
+      }
+      if (w.endsWith('en') && w.length > 3) {
+        const r = w.slice(0, -2); // öken → ök
+        return { sg: r + 'nen', pli: r + 'nar', pld: r + 'narna' };
+      }
+      if (w.endsWith('on') && w.length > 3) {
+        const r = w.slice(0, -2); // morgon → morg
+        return { sg: w + 'en', pli: r + 'nar', pld: r + 'narna' };
+      }
+      if (w.endsWith('ar') && w.length > 3) {
+        const r = w.slice(0, -2); // sommar → somm
+        return { sg: w + 'en', pli: r + 'rar', pld: r + 'rarna' };
+      }
+      // Obetonat -e: pojke → pojken/pojkar/pojkarna
+      if (w.endsWith('e')) {
+        const s = w.slice(0, -1);
+        return { sg: w + 'n', pli: s + 'ar', pld: s + 'arna' };
+      }
+      // Standard: konsonantslutande (arm, dag, bil)
+      return { sg: w + 'en', pli: w + 'ar', pld: w + 'arna' };
     }
-    case 3:
+    case 3: {
+      // Obetonat -el (regel, möbel, muskel)
+      if (w.endsWith('el')) {
+        const r = w.slice(0, -2);
+        return { sg: w + 'n', pli: r + 'ler', pld: r + 'lerna' };
+      }
+      // Obetonat -er (fiber)
+      if (w.endsWith('er') && w.length > 4) {
+        const r = w.slice(0, -2);
+        return { sg: w + 'n', pli: r + 'rer', pld: r + 'rerna' };
+      }
+      // -tor/-sor (motor, traktor, professor): obetonat, tar bara -n
+      if (w.endsWith('tor') || w.endsWith('sor')) {
+        return { sg: w + 'n', pli: w + 'er', pld: w + 'erna' };
+      }
+      // Vokalslutande (idé, kategori): tar bara -n
+      if (/[aeiouyåäö]$/.test(w)) {
+        return { sg: w + 'n', pli: w + 'er', pld: w + 'erna' };
+      }
+      // Standard grupp 3 (film, polis, instruktör, möjlighet)
       return { sg: w + 'en', pli: w + 'er', pld: w + 'erna' };
+    }
     case 4:
       return { sg: w + 't', pli: w + 'n', pld: w + 'na' };
     case 5: {

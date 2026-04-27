@@ -321,21 +321,35 @@ function makeAdjQuestion(base, type, id) {
 // SUBSTANTIV
 // ══════════════════════════════════════════════════════════════════════════════
 
-// Grupp 3-suffix enligt Fasth-Kannermark (betonade ändelser och lånordsuffix)
-const G3_SUFFIXES = [
-  // Betonade svenska suffix
-  'het', 'nad', 'skap',
-  // Betonade låneordsuffix
-  'ör', 'eur', 'ion', 'itet', 'else',
-  // Vokaliska suffix → grupp 3
+// Grupp 3-suffix för ALLA genus (inkl. ett-ord)
+const G3_ANY = new Set([
+  'eur', 'ion', 'itet', 'else',
   'eri', 'ori', 'é',
-  // ett-ord: -eum, -ium
   'eum', 'ium',
-  // -tor/-sor (motor, traktor, professor, reaktor)
   'tor', 'sor',
-  // Undantag från grupp 2 (Fasth-Kannermark p.10)
+]);
+
+// Grupp 3-suffix för en-ord
+const G3_EN = new Set([
+  // Betonade svenska suffix
+  'het', 'nad', 'skap', 'ör',
+  // Undantag med -er plural (Fasth-Kannermark p.10)
   'muskel', 'möbel', 'fiber',
-];
+  // Lånordsuffix: -ism, -ist, -ik, -ert, -ent
+  'ism', 'ist', 'ik', 'ert', 'ent',
+  // Konsonantgrupper vanliga i grupp 3: -ift (skrift, avgift, drift)
+  'ift',
+  // Sammansättningshuvuden med -er plural
+  'grupp', 'bank', 'kraft', 'klass', 'tjänst', 'text', 'port',
+  // Korta ändelser typiska för grupp 3
+  'ad', 'od', 'is', 'ut',
+]);
+
+// Ord som matchar G3_EN-suffix men ska vara grupp 2
+const FORCE_G2 = new Set(['spik', 'vik', 'kvist', 'tallrik', 'gris']);
+
+// Specifika ord som inte matchar suffix men ska vara grupp 3
+const FORCE_G3_EN = new Set(['kanal', 'film', 'analys', 'signal', 'rival', 'journal']);
 
 function classifyNoun(word, genus) {
   const w = word.toLowerCase().trim();
@@ -346,12 +360,20 @@ function classifyNoun(word, genus) {
   if (isEn && w.endsWith('a')) return 1;
 
   // ── Grupp 5: nollplural ──────────────────────────────────────────────────
-  // En-ord: agentsubstantiv på -are, -ande, -ende
   if (isEn && (w.endsWith('are') || w.endsWith('ande') || w.endsWith('ende'))) return 5;
 
-  // ── Grupp 3 (kontrolleras före grupp 4/5 så att -eri/-eum/-ium fångas) ──
-  for (const s of G3_SUFFIXES) {
+  // ── Explicit grupp-2-undantag (innan suffix-kontroll) ────────────────────
+  if (FORCE_G2.has(w)) return 2;
+
+  // ── Grupp 3 (suffix-kontroll) ─────────────────────────────────────────────
+  for (const s of G3_ANY) {
     if (w.endsWith(s)) return 3;
+  }
+  if (isEn) {
+    if (FORCE_G3_EN.has(w)) return 3;
+    for (const s of G3_EN) {
+      if (w.endsWith(s)) return 3;
+    }
   }
 
   // ── Grupp 4: ett-ord på vokal ────────────────────────────────────────────
@@ -361,12 +383,9 @@ function classifyNoun(word, genus) {
   if (isEtt) return 5;
 
   // ── Grupp 2: övriga en-ord ───────────────────────────────────────────────
-  // Specificerade obetonade ändelser (Fasth-Kannermark p.10 punkt 2–3)
   if (isEn && (w.endsWith('ing') || w.endsWith('dom') || w.endsWith('lek'))) return 2;
-  // Obetonat -e, -el, -en, -er, -ar, -on
   if (isEn && /(?:el|en|er|ar|on)$/.test(w)) return 2;
   if (isEn && w.endsWith('e')) return 2;
-  // Default: en-ord på konsonant → grupp 2
   if (isEn) return 2;
 
   return null;
@@ -405,6 +424,10 @@ function nounForms(word, group, genus) {
       if (w.endsWith('e')) {
         const s = w.slice(0, -1);
         return { sg: w + 'n', pli: s + 'ar', pld: s + 'arna' };
+      }
+      // Obetonat -o: radio → radion/radior/radiorna
+      if (w.endsWith('o')) {
+        return { sg: w + 'n', pli: w + 'r', pld: w + 'rna' };
       }
       // Standard: konsonantslutande (arm, dag, bil)
       return { sg: w + 'en', pli: w + 'ar', pld: w + 'arna' };

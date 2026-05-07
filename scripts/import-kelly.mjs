@@ -343,13 +343,24 @@ const G3_EN = new Set([
   'grupp', 'bank', 'kraft', 'klass', 'tjänst', 'text', 'port',
   // Korta ändelser typiska för grupp 3
   'ad', 'od', 'is', 'ut',
+  // Vokalslutande en-ord med -er plural (filosofi → filosofier)
+  'i',
 ]);
 
 // Ord som matchar G3_EN-suffix men ska vara grupp 2
-const FORCE_G2 = new Set(['spik', 'vik', 'kvist', 'tallrik', 'gris']);
+const FORCE_G2 = new Set(['spik', 'vik', 'kvist', 'tallrik', 'gris', 'taxi']);
 
 // Specifika ord som inte matchar suffix men ska vara grupp 3
-const FORCE_G3_EN = new Set(['kanal', 'film', 'analys', 'signal', 'rival', 'journal']);
+const FORCE_G3_EN = new Set([
+  'kanal', 'film', 'analys', 'signal', 'rival', 'journal',
+  'synd', 'fond', 'sprit',
+]);
+
+// Ord med oregelbunden omljudsplural – kan inte genereras automatiskt, utesluts ur banken
+const SKIP_NOUNS = new Set([
+  'bonde', 'hand', 'tand', 'fot', 'bok', 'son', 'bror',
+  'dotter', 'mor', 'far', 'strand', 'brand', 'man', 'natt',
+]);
 
 function classifyNoun(word, genus) {
   const w = word.toLowerCase().trim();
@@ -555,6 +566,7 @@ const nounQuestions = [];
 for (const r of substRows) {
   const word = cleanWord(r[1]);
   if (!word || word.length < 2) continue;
+  if (SKIP_NOUNS.has(word.toLowerCase())) continue;
   const rawGenus = r[0] ? String(r[0]).toLowerCase().trim() : '';
   const genus = rawGenus === 'ett' ? 'ett' : (r[2] === 'noun-ett' ? 'ett' : 'en');
   const group = classifyNoun(word, genus);

@@ -370,7 +370,7 @@ const MANUAL_NOUNS = {
   'far':    { group: 3, sg: 'fadern',  pli: 'fäder',   pld: 'fäderna'   },
   'strand': { group: 3, sg: 'stranden',pli: 'stränder',pld: 'stränderna'},
   'brand':  { group: 3, sg: 'branden', pli: 'bränder', pld: 'bränderna' },
-  'man':    { group: 3, sg: 'mannen',  pli: 'männen',  pld: 'männen'    },
+  'man':    { group: 3, sg: 'mannen',  pli: 'män',  pld: 'männen'    },
   'natt':   { group: 3, sg: 'natten',  pli: 'nätter',  pld: 'nätterna'  },
 };
 

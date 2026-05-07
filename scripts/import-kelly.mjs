@@ -356,11 +356,23 @@ const FORCE_G3_EN = new Set([
   'synd', 'fond', 'sprit',
 ]);
 
-// Ord med oregelbunden omljudsplural – kan inte genereras automatiskt, utesluts ur banken
-const SKIP_NOUNS = new Set([
-  'bonde', 'hand', 'tand', 'fot', 'bok', 'son', 'bror',
-  'dotter', 'mor', 'far', 'strand', 'brand', 'man', 'natt',
-]);
+// Manuell tabell för ord med oregelbunden omljudsplural – kontrollera och rätta vid behov
+const MANUAL_NOUNS = {
+  'bonde':  { group: 3, sg: 'bonden',  pli: 'bönder',  pld: 'bönderna'  },
+  'hand':   { group: 3, sg: 'handen',  pli: 'händer',  pld: 'händerna'  },
+  'tand':   { group: 3, sg: 'tanden',  pli: 'tänder',  pld: 'tänderna'  },
+  'fot':    { group: 3, sg: 'foten',   pli: 'fötter',  pld: 'fötterna'  },
+  'bok':    { group: 3, sg: 'boken',   pli: 'böcker',  pld: 'böckerna'  },
+  'son':    { group: 3, sg: 'sonen',   pli: 'söner',   pld: 'sönerna'   },
+  'bror':   { group: 3, sg: 'brodern', pli: 'bröder',  pld: 'bröderna'  },
+  'dotter': { group: 2, sg: 'dottern', pli: 'döttrar', pld: 'döttrarna' },
+  'mor':    { group: 2, sg: 'modern',  pli: 'mödrar',  pld: 'mödrarna'  },
+  'far':    { group: 3, sg: 'fadern',  pli: 'fäder',   pld: 'fäderna'   },
+  'strand': { group: 3, sg: 'stranden',pli: 'stränder',pld: 'stränderna'},
+  'brand':  { group: 3, sg: 'branden', pli: 'bränder', pld: 'bränderna' },
+  'man':    { group: 3, sg: 'mannen',  pli: 'männen',  pld: 'männen'    },
+  'natt':   { group: 3, sg: 'natten',  pli: 'nätter',  pld: 'nätterna'  },
+};
 
 function classifyNoun(word, genus) {
   const w = word.toLowerCase().trim();
@@ -477,8 +489,8 @@ function nounForms(word, group, genus) {
 
 function fmtForms(f) { return `${f.sg} – ${f.pli} – ${f.pld}`; }
 
-function makeNounQuestion(word, group, genus, id) {
-  const correct = nounForms(word, group, genus);
+function makeNounQuestion(word, group, genus, id, manualForms) {
+  const correct = manualForms || nounForms(word, group, genus);
   if (!correct) return null;
   const correctStr = fmtForms(correct);
 
@@ -566,12 +578,13 @@ const nounQuestions = [];
 for (const r of substRows) {
   const word = cleanWord(r[1]);
   if (!word || word.length < 2) continue;
-  if (SKIP_NOUNS.has(word.toLowerCase())) continue;
   const rawGenus = r[0] ? String(r[0]).toLowerCase().trim() : '';
   const genus = rawGenus === 'ett' ? 'ett' : (r[2] === 'noun-ett' ? 'ett' : 'en');
-  const group = classifyNoun(word, genus);
+  const manual = MANUAL_NOUNS[word.toLowerCase()];
+  const group = manual ? manual.group : classifyNoun(word, genus);
   if (!group) continue;
-  const q = makeNounQuestion(word, group, genus, nId++);
+  const manualForms = manual ? { sg: manual.sg, pli: manual.pli, pld: manual.pld } : null;
+  const q = makeNounQuestion(word, group, genus, nId++, manualForms);
   if (q) nounQuestions.push(q);
 }
 const nounTests = makeTests(nounQuestions, 'nbank-', 'Substantiv, test', 'Substantiv – deklination');

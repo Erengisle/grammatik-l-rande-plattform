@@ -5,6 +5,7 @@ import { BUILT_IN_TESTS_VERB, VERB_CATEGORIES } from "@/data/questions_verb";
 import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
 import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
 import { NOUN_BANK_TESTS, NOUN_BANK_CATEGORIES } from "@/data/questions_nouns";
+import VerbGruppSpel from "@/components/VerbGruppSpel";
 import "@/styles/grammar.css";
 
 const ALL_BUILT_IN = [...BUILT_IN_TESTS_VERB, ...VERB_BANK_TESTS, ...BUILT_IN_TESTS_ADJ, ...ADJ_BANK_TESTS, ...NOUN_BANK_TESTS, ...BUILT_IN_TESTS];
@@ -61,7 +62,7 @@ function SubjectIcon({ icon, bg }: { icon: string; bg: string }) {
 }
 
 // ── STUDENT TEST LIST ──
-function StudentTests({ allTests, results, onSelect }: any) {
+function StudentTests({ allTests, results, onSelect, onStartSpel }: any) {
   const [subject, setSubject] = useState<string | null>(null);
 
   function last(id: string) {
@@ -83,6 +84,14 @@ function StudentTests({ allTests, results, onSelect }: any) {
           <div className="section-sub">Vad vill du träna på idag?</div>
         </div>
         <div className="wrap">
+          <button onClick={onStartSpel} className="item-card" style={{ background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)", border: "none", color: "#fff" }}>
+            <div className="item-icon" style={{ background: "rgba(255,255,255,0.2)", color: "#fff" }}><span className="icon-sym">▶</span></div>
+            <div style={{ flex: 1 }}>
+              <div className="item-title" style={{ color: "#fff" }}>Verbgruppsspelet</div>
+              <div className="item-sub" style={{ color: "rgba(255,255,255,0.8)" }}>Öva inför provet – välj rätt grupp!</div>
+            </div>
+            <span className="chevron" style={{ color: "#fff" }}>›</span>
+          </button>
           {SUBJECTS.map(s => {
             const count = allTests.filter((t: any) => s.categories.includes(t.category)).length;
             if (count === 0) return null;
@@ -363,9 +372,11 @@ export default function GrammarApp() {
 
   if (loading) return <div className="app"><div className="wrap"><div className="empty">Laddar…</div></div></div>;
 
+  if (step === "verbspel") return <VerbGruppSpel onBack={() => setStep("tests")} />;
+
   return (
     <div className="app">
-      {step === "tests" && <StudentTests allTests={ALL_BUILT_IN} results={results} onSelect={(t: any) => { setActiveTest(t); setStep("quiz") }} />}
+      {step === "tests" && <StudentTests allTests={ALL_BUILT_IN} results={results} onSelect={(t: any) => { setActiveTest(t); setStep("quiz") }} onStartSpel={() => setStep("verbspel")} />}
       {step === "quiz" && <Quiz test={activeTest} onFinish={handleFinish} onBack={() => setStep("tests")} />}
     </div>
   );

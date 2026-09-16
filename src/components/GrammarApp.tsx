@@ -6,7 +6,7 @@ import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
 import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
 import { NOUN_BANK_TESTS, NOUN_BANK_CATEGORIES } from "@/data/questions_nouns";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
+import { supabase, signInWithGoogle, signOut, APP_TAG } from "@/lib/supabase";
 import { Link } from "react-router-dom";
 import "@/styles/grammar.css";
 
@@ -384,7 +384,7 @@ export default function GrammarApp() {
     try {
       const { data: session, error: sessionErr } = await supabase
         .from("quiz_sessions")
-        .insert({ user_id: user.id, quiz_name: activeTest.title, score, max_score: total })
+        .insert({ user_id: user.id, quiz_name: activeTest.title, score, max_score: total, app_tag: APP_TAG })
         .select("id")
         .single();
       if (sessionErr || !session) throw sessionErr;

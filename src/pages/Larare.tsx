@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
+import { supabase, signInWithGoogle, signOut, APP_TAG } from "@/lib/supabase";
 import { Link } from "react-router-dom";
 
 const TEACHER_EMAIL = "hakan.hildingsson@edu.huddinge.se";
@@ -9,6 +9,7 @@ interface OverviewRow {
   email: string;
   full_name: string | null;
   session_id: string;
+  app_tag: string | null;
   quiz_name: string;
   score: number;
   max_score: number;
@@ -80,6 +81,7 @@ export default function Larare() {
     supabase
       .from("teacher_overview")
       .select("*")
+      .eq("app_tag", APP_TAG)
       .then(({ data, error }) => {
         if (!error && data) setRows(data as OverviewRow[]);
         setLoading(false);

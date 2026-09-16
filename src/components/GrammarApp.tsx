@@ -248,9 +248,16 @@ function Quiz({ test, onFinish, onBack }: any) {
       else setGroupErr(true);
     }
 
+    // KONJ_GROUPS/SUBJ_GROUPS values look like "Villkor – om, ifall, såvida":
+    // the label is already repeated at the start, so strip it before showing
+    // the description next to the (bold) label.
+    function stripLeadingLabel(text: string) {
+      return text.includes(" – ") ? text.split(" – ").slice(1).join(" – ") : text;
+    }
+
     function groupLabel(g: string) {
-      if (isKonj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: KONJ_GROUPS[g] };
-      if (isSubj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: SUBJ_GROUPS[g] };
+      if (isKonj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: stripLeadingLabel(KONJ_GROUPS[g]) };
+      if (isSubj) return { label: g.charAt(0).toUpperCase() + g.slice(1), desc: stripLeadingLabel(SUBJ_GROUPS[g]) };
       if (isNoun) return { label: GROUP_INFO[`n${g}`]?.label || `Dekl ${g}`, desc: GROUP_INFO[`n${g}`]?.desc || "" };
       return { label: GROUP_INFO[g]?.label || g, desc: GROUP_INFO[g]?.desc || "" };
     }

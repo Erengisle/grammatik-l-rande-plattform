@@ -5,7 +5,12 @@ import { BUILT_IN_TESTS_VERB, VERB_CATEGORIES } from "@/data/questions_verb";
 import { VERB_BANK_TESTS } from "@/data/questions_verb_bank";
 import { ADJ_BANK_TESTS } from "@/data/questions_adj_bank";
 import { NOUN_BANK_TESTS, NOUN_BANK_CATEGORIES } from "@/data/questions_nouns";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase, signInWithGoogle, signOut } from "@/lib/supabase";
+import { Link } from "react-router-dom";
 import "@/styles/grammar.css";
+
+const TEACHER_EMAIL = "hakan.hildingsson@edu.huddinge.se";
 
 const ALL_BUILT_IN = [...BUILT_IN_TESTS_VERB, ...VERB_BANK_TESTS, ...BUILT_IN_TESTS_ADJ, ...ADJ_BANK_TESTS, ...NOUN_BANK_TESTS, ...BUILT_IN_TESTS];
 
@@ -341,8 +346,23 @@ function Quiz({ test, onFinish, onBack }: any) {
   );
 }
 
+// ── LOGIN GATE ──
+function LoginScreen() {
+  return (
+    <div className="wrap" style={{ textAlign: "center", paddingTop: "4rem" }}>
+      <div className="topbar-icon" style={{ margin: "0 auto 16px" }}>Sv</div>
+      <div className="st g1">Svensk grammatik</div>
+      <div className="muted g2" style={{ marginBottom: 24 }}>
+        Logga in med ditt skolkonto för att träna och spara resultat.
+      </div>
+      <button className="btn btn-p" onClick={() => signInWithGoogle()}>Logga in med Google</button>
+    </div>
+  );
+}
+
 // ── ROOT ──
 export default function GrammarApp() {
+  const { user, loading: authLoading } = useAuth();
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState("tests");
@@ -354,17 +374,50 @@ export default function GrammarApp() {
     setLoading(false);
   }, []);
 
-  function handleFinish(score: number, total: number, answers: Record<string, string>) {
+  async function handleFinish(score: number, total: number, answers: Record<string, string>) {
     const r = { id: uid(), testId: activeTest.id, testTitle: activeTest.title, score, total, date: new Date().toISOString(), answers };
     const u = [...results, r];
     setResults(u);
     save("quiz_results", u);
+
+    if (!user) return;
+    try {
+      const { data: session, error: sessionErr } = await supabase
+        .from("quiz_sessions")
+        .insert({ user_id: user.id, quiz_name: activeTest.title, score, max_score: total })
+        .select("id")
+        .single();
+      if (sessionErr || !session) throw sessionErr;
+
+      const rows = activeTest.questions.map((q: any) => {
+        const chosenKey = answers[q.id];
+        return {
+          session_id: session.id,
+          question_text: q.context || q.text || q.word || q.id,
+          chosen_option: chosenKey ? (q.options?.[chosenKey] ?? chosenKey) : "(ej besvarad)",
+          correct_option: q.options?.[q.correct] ?? String(q.correct),
+          is_correct: chosenKey === q.correct,
+        };
+      });
+      const { error: answersErr } = await supabase.from("quiz_answers").insert(rows);
+      if (answersErr) throw answersErr;
+    } catch (err) {
+      console.warn("Kunde inte spara resultat till Supabase:", err);
+    }
   }
 
-  if (loading) return <div className="app"><div className="wrap"><div className="empty">Laddar…</div></div></div>;
+  if (authLoading || loading) return <div className="app"><div className="wrap"><div className="empty">Laddar…</div></div></div>;
+  if (!user) return <div className="app"><LoginScreen /></div>;
 
   return (
     <div className="app">
+      <div className="topbar" style={{ justifyContent: "space-between" }}>
+        <span className="muted" style={{ fontSize: 13 }}>{user.email}</span>
+        <div style={{ display: "flex", gap: 12 }}>
+          {user.email === TEACHER_EMAIL && <Link to="/larare" className="muted" style={{ fontSize: 13 }}>Lärarpanel</Link>}
+          <button className="muted" style={{ fontSize: 13, background: "none", border: "none", cursor: "pointer" }} onClick={() => signOut()}>Logga ut</button>
+        </div>
+      </div>
       {step === "tests" && <StudentTests allTests={ALL_BUILT_IN} results={results} onSelect={(t: any) => { setActiveTest(t); setStep("quiz") }} />}
       {step === "quiz" && <Quiz test={activeTest} onFinish={handleFinish} onBack={() => setStep("tests")} />}
     </div>
